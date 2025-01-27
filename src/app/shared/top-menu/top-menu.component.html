@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" [routerLink]="['/events']">SVTickets</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            @if (isLogged()) {
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/events']" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/events/add']" [routerLinkActive]="['active']">New event</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/profile']" [routerLinkActive]="['active']">My profile</a>
+                </li>
+            }
+        </ul>
+        <ul class="navbar-nav">
+            @if (!isLogged()) {
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/auth/login']" id="login" [routerLinkActive]="['active']">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/auth/register']" id="register" [routerLinkActive]="['active']">Register</a>
+                </li>
+            }
+            @if (isLogged()) {
+                <li class="nav-item">
+                    <a class="nav-link logout" id="logout" (click)="logout()" (keydown.enter)="logout()" tabindex="0" style="cursor: pointer;">Logout</a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>

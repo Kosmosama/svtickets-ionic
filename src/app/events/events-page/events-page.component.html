@@ -1,0 +1,46 @@
+<nav class="navbar navbar-light bg-light justify-content-between mt-3">
+    <div class="container-fluid">
+        <ul class="nav">
+            <li class="nav-item">
+                <button class="nav-link" href="#" id="orderDate" (click)="orderBy('distance')">Order by distance</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" href="#" id="orderDate" (click)="orderBy('date')">Order by date</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" href="#" id="orderPrice" (click)="orderBy('price')">Order by price</button>
+            </li>
+        </ul>
+        <form class="d-flex mb-0">
+            <input class="form-control me-2" type="text" name="search" id="search" placeholder="Search"
+                aria-label="Search" [formControl]="searchControl">
+        </form>
+    </div>
+</nav>
+
+<div class="text-muted" id="filterInfo">{{ filterSummary() }}</div>
+
+<div id="eventsContainer" class="mb-4 mt-4 row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" 
+[@animateList]="events().length" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMoreEvents()">
+    @if (events().length) {
+        @for (event of events(); track event.id) {
+        <event-card [event]="event" (deleted)="handleEventDeleted($event)"></event-card>
+        }
+    }
+    @else {
+        <div class="col">
+            <div class="alert alert-info" role="alert">
+                No events found.
+            </div>
+        </div>
+    }
+</div>
+
+<!-- 
+@if (more()) {
+    <div class="mb-4">
+        <button id="loadMore" class="btn btn-primary" (click)="loadMoreEvents()">
+        Load More events
+        </button>
+    </div>
+} -->

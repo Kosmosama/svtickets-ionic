@@ -1,0 +1,94 @@
+<form action="#" class="mt-4" id="newEvent" (ngSubmit)="submitNewEvent()" [formGroup]="eventForm">
+
+    @if(error()) {
+        <div class="alert alert-danger">Unexpected error occurred.</div>
+    }
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" formControlName="title" [validationClasses]="{valid: 'is-valid', invalid: 'is-invalid'}">
+        
+        @let titleErrors = eventForm.get('title')?.errors;
+
+        @if(titleErrors?.['required']) {
+        <div class="invalid-feedback">Title cannot be empty</div>
+        }
+        @if(titleErrors?.['pattern']) {
+            <div class="invalid-feedback">
+                Title must start with a letter and can only contain letters and spaces
+            </div>
+        } @else if (titleErrors?.['minlength']){
+            <div class="invalid-feedback">
+                You must enter at least
+                {{titleErrors?.['minlength'].requiredLength - titleErrors?.['minlength'].actualLength}}
+                characters more
+            </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" name="date" formControlName="date" [validationClasses]="{valid: 'is-valid', invalid: 'is-invalid'}">
+        
+        @let dateErrors = eventForm.get('date')?.errors;
+
+        @if (dateErrors?.['required']) {
+            <div class="invalid-feedback">Date is required.</div>
+        }
+        @if (dateErrors?.['minDate']) {
+            <div class="invalid-feedback">The date can't be before {{today | date:'MM/dd/yyyy'}}</div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" formControlName="description" [validationClasses]="{valid: 'is-valid', invalid: 'is-invalid'}"></textarea>
+        
+        @let descErrors = eventForm.get('description')?.errors;
+
+        @if (descErrors?.['required']) {
+            <div class="invalid-feedback">Description is required.</div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price (in €)</label>
+        <input type="number" class="form-control" id="price" name="price" min="0.00" max="10000.00" step="0.01" formControlName="price" [validationClasses]="{valid: 'is-valid', invalid: 'is-invalid'}">
+        
+        @let priceErrors = eventForm.get('price')?.errors;
+
+        @if (priceErrors?.['required']) {
+            <div class="invalid-feedback">Price is required.</div>
+        }
+        @if (priceErrors?.['min']) {
+            <div class="invalid-feedback">Price must be a positive number.</div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" name="image" encodeBase64 (encoded)="handleEncodedImage($event)" formControlName="image" #fileInput
+        [validationClasses]="{valid: 'is-valid', invalid: 'is-invalid'}" (change)="checkImage(fileInput)">
+        
+        @let imageErrors = eventForm.get('image')?.errors;
+
+        @if (imageErrors?.['imageRequiredError']) {
+            <div class="invalid-feedback">An image is required.</div>
+        }
+
+        @if (!imageErrors && !event()) {
+            <p class="text-muted">(there are no errors, this shouldn't be red, the directive isn't updating after the change)</p>
+        }
+    </div>
+
+    @if (base64image) {
+		<img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
+    }
+
+    <div class="map-container">
+        <ol-map [coordinates]="coordinates()">
+            <ga-autocomplete (locationChange)="changePlace($event)"></ga-autocomplete>
+            <ol-marker [coordinates]="coordinates()"></ol-marker>
+        </ol-map>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">Create</button>
+    </div>
+</form>
