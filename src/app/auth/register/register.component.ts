@@ -7,8 +7,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ValidationClassesDirective } from '../../shared/directives/valdation-classes.directive';
 import { Router, RouterLink } from '@angular/router';
 import { GeolocationService } from '../services/geolocation.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmModalComponent } from '../../shared/modals/confirm-modal/confirm-modal.component';
+// import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+// import { ConfirmModalComponent } from '../../shared/modals/confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'register',
@@ -22,7 +22,7 @@ export class RegisterComponent {
     private fb = inject(NonNullableFormBuilder);
     private router = inject(Router);
     private destroyRef = inject(DestroyRef);
-    private modalService = inject(NgbModal);
+    // private modalService = inject(NgbModal);
 
     registerErrorCode = signal<number | null>(null);
 
@@ -111,10 +111,11 @@ export class RegisterComponent {
      */
     canDeactivate() {
         if (this.saved || this.registerForm.pristine) return true;
+        return confirm();
             
-        const modalRef = this.modalService.open(ConfirmModalComponent);
-        modalRef.componentInstance.title = 'Changes will not be saved';
-        modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
-        return modalRef.result.catch(() => false);
+        // const modalRef = this.modalService.open(ConfirmModalComponent);
+        // modalRef.componentInstance.title = 'Changes will not be saved';
+        // modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
+        // return modalRef.result.catch(() => false);
     }
 }

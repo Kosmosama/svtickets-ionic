@@ -81,12 +81,12 @@
 		<img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
     }
 
-    <div class="map-container">
+    <!-- <div class="map-container">
         <ol-map [coordinates]="coordinates()">
             <ga-autocomplete (locationChange)="changePlace($event)"></ga-autocomplete>
             <ol-marker [coordinates]="coordinates()"></ol-marker>
         </ol-map>
-    </div>
+    </div> -->
 
     <div>
         <button type="submit" class="btn btn-primary" [disabled]="eventForm.invalid">Create</button>

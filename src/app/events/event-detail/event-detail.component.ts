@@ -3,8 +3,8 @@ import { EventCardComponent } from "../event-card/event-card.component";
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { Comment, MyEvent } from '../../shared/interfaces/my-event';
-import { OlMapDirective } from '../../ol-maps/ol-map.directive';
-import { OlMarkerDirective } from '../../ol-maps/ol-marker.directive';
+// import { OlMapDirective } from '../../ol-maps/ol-map.directive';
+// import { OlMarkerDirective } from '../../ol-maps/ol-marker.directive';
 import { ValidationClassesDirective } from '../../shared/directives/valdation-classes.directive';
 import { User } from '../../shared/interfaces/user';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,7 +14,7 @@ import { EventsService } from '../services/events.service';
 @Component({
     selector: 'event-detail',
     standalone: true,
-    imports: [EventCardComponent, OlMapDirective, OlMarkerDirective, ValidationClassesDirective, RouterLink, ReactiveFormsModule, DatePipe],
+    imports: [EventCardComponent, ValidationClassesDirective, RouterLink, ReactiveFormsModule, DatePipe],// , OlMapDirective, OlMarkerDirective
     templateUrl: './event-detail.component.html',
     styleUrl: './event-detail.component.css'
 })

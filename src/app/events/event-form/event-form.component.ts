@@ -3,23 +3,23 @@ import { Component, DestroyRef, effect, inject, input, signal } from "@angular/c
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { GaAutocompleteDirective } from "../../ol-maps/ga-autocomplete.directive";
-import { OlMapDirective } from "../../ol-maps/ol-map.directive";
-import { OlMarkerDirective } from "../../ol-maps/ol-marker.directive";
-import { SearchResult } from "../../ol-maps/search-result";
+// import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+// import { GaAutocompleteDirective } from "../../ol-maps/ga-autocomplete.directive";
+// import { OlMapDirective } from "../../ol-maps/ol-map.directive";
+// import { OlMarkerDirective } from "../../ol-maps/ol-marker.directive";
+// import { SearchResult } from "../../ol-maps/search-result";
 import { EncodeBase64Directive } from "../../shared/directives/encode-base64.directive";
 import { minDateValidator } from "../../shared/directives/min-date.directive";
 import { ValidationClassesDirective } from "../../shared/directives/valdation-classes.directive";
 import { CanComponentDeactivate } from "../../shared/interfaces/can-component-deactivate";
 import { MyEvent, MyEventInsert } from "../../shared/interfaces/my-event";
-import { ConfirmModalComponent } from "../../shared/modals/confirm-modal/confirm-modal.component";
+// import { ConfirmModalComponent } from "../../shared/modals/confirm-modal/confirm-modal.component";
 import { EventsService } from "../services/events.service";
 
 @Component({
     selector: "event-form",
     standalone: true,
-    imports: [ReactiveFormsModule, EncodeBase64Directive, ValidationClassesDirective, DatePipe, OlMapDirective, OlMarkerDirective, GaAutocompleteDirective],
+    imports: [ReactiveFormsModule, EncodeBase64Directive, ValidationClassesDirective, DatePipe], //, OlMapDirective, OlMarkerDirective, GaAutocompleteDirective
     templateUrl: "./event-form.component.html",
     styleUrl: "./event-form.component.css"
 })
@@ -27,7 +27,7 @@ export class EventFormComponent implements CanComponentDeactivate {
     private eventsService = inject(EventsService);
     private destroyRef = inject(DestroyRef);
     private router = inject(Router);
-    private modalService = inject(NgbModal);
+    // private modalService = inject(NgbModal);
 
     event = input<MyEvent>();
 
@@ -38,10 +38,10 @@ export class EventFormComponent implements CanComponentDeactivate {
     coordinates = signal<[number, number]>([-0.5, 38.5]);
     error = signal<number | null>(null);
 
-    changePlace(result: SearchResult) {
-        this.coordinates.set(result.coordinates);
-        this.address = result.address;
-    }
+    // changePlace(result: SearchResult) {
+    //     this.coordinates.set(result.coordinates);
+    //     this.address = result.address;
+    // }
 
     private fb = inject(NonNullableFormBuilder);
     eventForm = this.fb.group({
@@ -111,11 +111,12 @@ export class EventFormComponent implements CanComponentDeactivate {
      */
     canDeactivate() {
         if (this.saved || this.eventForm.pristine) return true;
+        return confirm();
 
-        const modalRef = this.modalService.open(ConfirmModalComponent);
-        modalRef.componentInstance.title = 'Changes will not be saved';
-        modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
-        return modalRef.result.catch(() => false);
+        // const modalRef = this.modalService.open(ConfirmModalComponent);
+        // modalRef.componentInstance.title = 'Changes will not be saved';
+        // modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
+        // return modalRef.result.catch(() => false);
     }
 
     /**

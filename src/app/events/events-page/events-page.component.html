@@ -20,8 +20,8 @@
 
 <div class="text-muted" id="filterInfo">{{ filterSummary() }}</div>
 
-<div id="eventsContainer" class="mb-4 mt-4 row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" 
-[@animateList]="events().length" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMoreEvents()">
+<div id="eventsContainer" class="mb-4 mt-4 row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" [@animateList]="events().length" > 
+<!-- infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="loadMoreEvents()" -->
     @if (events().length) {
         @for (event of events(); track event.id) {
         <event-card [event]="event" (deleted)="handleEventDeleted($event)"></event-card>
@@ -36,11 +36,11 @@
     }
 </div>
 
-<!-- 
+
 @if (more()) {
     <div class="mb-4">
         <button id="loadMore" class="btn btn-primary" (click)="loadMoreEvents()">
         Load More events
         </button>
     </div>
-} -->
+}

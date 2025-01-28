@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, input, model, signal } from '@angular/core';
 import { User, UserPasswordEdit, UserPhotoEdit, UserProfileEdit } from '../../shared/interfaces/user';
-import { OlMapDirective } from '../../ol-maps/ol-map.directive';
-import { OlMarkerDirective } from '../../ol-maps/ol-marker.directive';
+// import { OlMapDirective } from '../../ol-maps/ol-map.directive';
+// import { OlMarkerDirective } from '../../ol-maps/ol-marker.directive';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { ValidationClassesDirective } from '../../shared/directives/valdation-classes.directive';
@@ -12,7 +12,7 @@ import { EncodeBase64Directive } from '../../shared/directives/encode-base64.dir
 @Component({
     selector: 'profile-page',
     standalone: true,
-    imports: [RouterLink, OlMapDirective, OlMarkerDirective, ReactiveFormsModule, ValidationClassesDirective, EncodeBase64Directive],
+    imports: [RouterLink, ReactiveFormsModule, ValidationClassesDirective, EncodeBase64Directive], // OlMapDirective, OlMarkerDirective, 
     templateUrl: './profile-page.component.html',
     styleUrl: './profile-page.component.css'
 })

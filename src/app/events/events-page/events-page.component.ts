@@ -8,13 +8,13 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { EventsResponse } from "../../shared/interfaces/responses";
 import { ProfileService } from "../../profile/services/profile.service";
 import { animate, query, stagger, style, transition, trigger } from "@angular/animations";
-import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+// import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 // import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
     selector: "events-page",
     standalone: true,
-    imports: [EventCardComponent, ReactiveFormsModule, InfiniteScrollDirective],
+    imports: [EventCardComponent, ReactiveFormsModule, ], //InfiniteScrollDirective
     templateUrl: "./events-page.component.html",
     styleUrls: ["./events-page.component.css"],
     animations: [

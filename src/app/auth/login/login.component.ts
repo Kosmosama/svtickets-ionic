@@ -7,12 +7,11 @@ import { AuthService } from '../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
-import { GoogleLoginDirective } from '../google-login/google-login.directive';
 
 @Component({
     selector: 'login',
     standalone: true,
-    imports: [ReactiveFormsModule, ValidationClassesDirective, RouterLink, GoogleLoginDirective],
+    imports: [ReactiveFormsModule, ValidationClassesDirective, RouterLink, ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })
@@ -65,19 +64,19 @@ export class LoginComponent {
      * Handles Google login, including geolocation and navigation.
      * @param {google.accounts.id.CredentialResponse} resp - The credential response from Google login.
      */
-    loginWithGoogle(resp: google.accounts.id.CredentialResponse) {
-        const thirdPartyUser: ThirdPartyLogin = {
-            token: resp.credential,
-            lat: 0,
-            lng: 0,
-        };
+    // loginWithGoogle(resp: google.accounts.id.CredentialResponse) {
+    //     const thirdPartyUser: ThirdPartyLogin = {
+    //         token: resp.credential,
+    //         lat: 0,
+    //         lng: 0,
+    //     };
 
-        this.login(thirdPartyUser)
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => {
-                this.router.navigate(['/events']);
-            });
-    }
+    //     this.login(thirdPartyUser)
+    //         .pipe(takeUntilDestroyed(this.destroyRef))
+    //         .subscribe(() => {
+    //             this.router.navigate(['/events']);
+    //         });
+    // }
 
     /**
      * Handles form-based login, including geolocation and navigation.

@@ -23,12 +23,13 @@
             <div class="row">
                 @if (event().mine) {
                 <div class="col">
-                    <button class="btn btn-danger delete" (confirm)="deleteEvent()" [swal]="{
+                    <button class="btn btn-danger delete" (confirm)="deleteEvent()">
+                        <!-- [swal]="{
                             title: 'Are you sure?',
                             icon: 'question',
                             showDenyButton: true,
                             denyButtonText: 'Don\'t delete.',
-                        }">
+                        }" -->
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>

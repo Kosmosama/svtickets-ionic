@@ -102,11 +102,11 @@
     }
 </div>
 
-<div class="map-container">
+<!-- <div class="map-container">
     <ol-map [coordinates]="[user().lng, user().lat]">
         <ol-marker [coordinates]="[user().lng, user().lat]"></ol-marker>
     </ol-map>
-</div>
+</div> -->
 
 <a [routerLink]="['/events']" [queryParams]="{ creator: user().id }" class="m-2">Created events</a>
 <a [routerLink]="['/events']" [queryParams]="{ attending: user().id }" class="m-2">Attended events</a>

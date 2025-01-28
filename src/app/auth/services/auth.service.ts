@@ -1,18 +1,18 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, Signal, signal, WritableSignal } from "@angular/core";
-import { CookieService } from "ngx-cookie-service";
+// import { CookieService } from "ngx-cookie-service";
 import { catchError, map, Observable, of } from "rxjs";
 import { TokenResponse } from "../../shared/interfaces/responses";
 import { ThirdPartyLogin, User, UserLogin } from "../../shared/interfaces/user";
-import { SsrCookieService } from "./ssr-cookie.service";
+// import { SsrCookieService } from "./ssr-cookie.service";
 
 @Injectable({
     providedIn: "root"
 })
 export class AuthService {
     private http = inject(HttpClient);
-    private cookieService = inject(CookieService);
-    private ssrCookieService = inject(SsrCookieService);
+    // private cookieService = inject(CookieService);
+    // private ssrCookieService = inject(SsrCookieService);
 
     #logged: WritableSignal<boolean> = signal(false);
 
@@ -40,7 +40,7 @@ export class AuthService {
             .post<TokenResponse>(endpoint, payload)
             .pipe(
                 map(({ accessToken }: TokenResponse) => {
-                    this.cookieService.set("token", accessToken, 365, "/");
+                    // this.cookieService.set("token", accessToken, 365, "/");
                     this.#logged.set(true);
                 })
             );
@@ -50,7 +50,7 @@ export class AuthService {
      * Logs out the user by clearing the authentication token and updating the logged-in state.
      */
     logout(): void {
-        this.cookieService.delete("token", "/");
+        // this.cookieService.delete("token", "/");
         this.#logged.set(false);
     }
 
@@ -76,7 +76,7 @@ export class AuthService {
                     return true;
                 }),
                 catchError(() => {
-                    this.cookieService.delete("token", "/");
+                    // this.cookieService.delete("token", "/");
                     this.#logged.set(false);
                     return of(false);
                 })
@@ -88,13 +88,13 @@ export class AuthService {
      * @returns {Observable<boolean>} An observable emitting true if the user is logged in, or false otherwise.
      */
     isLogged(): Observable<boolean> {
-        const token = this.ssrCookieService.getCookie('token');
+        // const token = this.ssrCookieService.getCookie('token');
 
         // User is logged if signal is true
         if (this.#logged()) return of(true);
 
         // User is not logged and token is missing
-        if (!token) return of(false);
+        // if (!token) return of(false);
 
         // Token exists, validate it
         return this.validateToken();
