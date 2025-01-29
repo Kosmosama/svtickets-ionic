@@ -1,0 +1,134 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-title>Register</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <form class="mt-4" (ngSubmit)="register()" [formGroup]="registerForm">
+        <legend>Create an account</legend>
+
+        @if(registerErrorCode() === 400) {
+        <ion-alert message="User with that email already exists." color="danger" isOpen="true"></ion-alert>
+        }
+
+        <ion-list>
+            <div class="mb-3">
+                @let nameControl = registerForm.get('name');
+                @let nameErrors = nameControl?.errors;
+
+                <ion-label for="name">Name:</ion-label>
+                <ion-input type="text" id="name" name="name" placeholder="Name" formControlName="name" />
+
+                @if (nameControl?.touched || nameControl?.dirty) {
+                @if(nameErrors?.['required']) {
+                <ion-text class="invalid-feedback">Name cannot be empty.</ion-text>
+                }
+                }
+            </div>
+            <div class="mb-3">
+                @let emailControl = registerForm.get('email');
+                @let emailErrors = emailControl?.errors;
+
+                <ion-label for="email">Email:</ion-label>
+                <ion-input type="email" name="email" id="email" placeholder="Email" required formControlName="email" />
+
+                @if (emailControl?.touched || emailControl?.dirty) {
+                @if(emailErrors?.['required']) {
+                <ion-text class="invalid-feedback">Email cannot be empty.</ion-text>
+                }
+
+                @if(emailErrors?.['email']) {
+                <ion-text class="invalid-feedback">Email must be an email.</ion-text>
+                }
+                }
+            </div>
+            <div class="mb-3">
+                @let repeatEmailControl = registerForm.get('repeatEmail');
+                @let repeatEmailErrors = repeatEmailControl?.errors;
+
+                <ion-label for="repeatEmail">Repeat Email:</ion-label>
+                <ion-input type="email" id="repeatEmail" name="repeatEmail" placeholder="Repeat Email" required
+                    formControlName="repeatEmail" />
+
+                @if (repeatEmailControl?.touched || repeatEmailControl?.dirty) {
+                @if(repeatEmailErrors?.['required']) {
+                <ion-text class="invalid-feedback">Email cannot be empty.</ion-text>
+                }
+
+                @if(repeatEmailErrors?.['email']) {
+                <ion-text class="invalid-feedback">Email must be an email.</ion-text>
+                }
+                @else if (repeatEmailErrors?.['emailMismatch']) {
+                <ion-text class="invalid-feedback">Emails do not match.</ion-text>
+                }
+                }
+            </div>
+            <div class="mb-3">
+                @let passwordControl = registerForm.get("password");
+                @let passwordErrors = passwordControl?.errors;
+
+                <ion-label for="password">Password:</ion-label>
+                <ion-input type="password" id="password" name="password" placeholder="Password" required
+                    formControlName="password" />
+
+
+                @if (passwordControl?.touched || passwordControl?.dirty) {
+                @if(passwordErrors?.['required']) {
+                <ion-text class="invalid-feedback">Password cannot be empty.</ion-text>
+                }
+
+                @if(passwordErrors?.['minlength']) {
+                <ion-text class="invalid-feedback">Password must be at least 4 characters long.</ion-text>
+                }
+                }
+            </div>
+            <div class="form-row">
+                <div class="mb-3 col">
+                    <ion-label for="lat">Latitude:</ion-label>
+                    <ion-input type="text" id="lat" name="lat" placeholder="Geolocating..." readonly
+                        formControlName="lat" />
+                </div>
+                <div class="mb-3 col">
+                    <ion-label for="lng">Longitude:</ion-label>
+                    <ion-input type="text" id="lng" name="lng" placeholder="Geolocating..." readonly
+                        formControlName="lng" />
+                </div>
+            </div>
+            <ion-item>
+                <ion-label position="inset">Avatar</ion-label>
+                <ion-button color="secondary" (click)="takePhoto()">
+                    <ion-icon name="camera" slot="start"></ion-icon>
+                    Camera
+                </ion-button>
+                <ion-button color="tertiary" (click)="pickFromGallery()">
+                    <ion-icon name="images" slot="start"></ion-icon>
+                    Gallery
+                </ion-button>
+            </ion-item>
+        </ion-list>
+
+        @if (base64image) {
+        <img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
+        }
+
+        <!-- [routerDirection]="'root'" -->
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-button fill="outline" [routerLink]="['/auth/login']">
+                        <ion-icon name="log-in" slot="start"></ion-icon>
+                        Cancel
+                    </ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button type="submit" color="primary" [disabled]="registerForm.invalid || !base64image">
+                        <!-- || !base64image -->
+                        <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                        Register
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>

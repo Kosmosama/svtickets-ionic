@@ -1,28 +1,27 @@
-import { afterNextRender, Component, DestroyRef, inject, signal } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { EncodeBase64Directive } from '../../shared/directives/encode-base64.directive';
-import { User } from '../../shared/interfaces/user';
+import { afterNextRender, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ValidationClassesDirective } from '../../shared/directives/valdation-classes.directive';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
+import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { NavController, IonRouterLink, ToastController, IonAlert, IonContent, IonHeader, IonInput, IonLabel, IonList, IonText, IonTitle, IonToolbar, IonItem, IonButton, IonIcon, IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
+import { User } from '../../shared/interfaces/user';
+import { AuthService } from '../services/auth.service';
 import { GeolocationService } from '../services/geolocation.service';
-// import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-// import { ConfirmModalComponent } from '../../shared/modals/confirm-modal/confirm-modal.component';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
-    selector: 'register',
+    selector: 'app-register',
+    templateUrl: './register.page.html',
+    styleUrls: ['./register.page.scss'],
     standalone: true,
-    imports: [EncodeBase64Directive, ReactiveFormsModule, ValidationClassesDirective, RouterLink],
-    templateUrl: './register.component.html',
-    styleUrl: './register.component.css'
+    imports: [IonCol, IonRow, IonGrid, IonIcon, IonButton, IonItem, RouterLink, IonInput, IonAlert, IonText, IonLabel, IonList, IonContent, IonHeader, IonToolbar, IonTitle, ReactiveFormsModule], // IonRouterLink, 
 })
-export class RegisterComponent {
+export class RegisterPage {
     private authService = inject(AuthService);
     private fb = inject(NonNullableFormBuilder);
-    private router = inject(Router);
     private destroyRef = inject(DestroyRef);
-    // private modalService = inject(NgbModal);
+    private toastCtrl = inject(ToastController);
+    private nav = inject(NavController);
+    private changeDetector = inject(ChangeDetectorRef);
 
     registerErrorCode = signal<number | null>(null);
 
@@ -49,7 +48,7 @@ export class RegisterComponent {
         password: ['', [Validators.required, Validators.minLength(4)]],
         lat: [0],
         lng: [0],
-        avatar: ['', Validators.required],
+        // avatar: ['', Validators.required],
     });
 
     /**
@@ -59,16 +58,6 @@ export class RegisterComponent {
      */
     repeatEmailValidator(): ValidatorFn {
         return ({ parent, value }: AbstractControl) => parent?.get('email')?.value === value ? null : { emailMismatch: true };
-    }
-
-    /**
-     * Checks whether the image input change actually placed a valid image, if the image was invalid,
-     * sets image preview to hidden once again.
-     * 
-     * @param fileInputElement Input element that contains the files.
-     */
-    checkImage(fileInputElement: HTMLInputElement) {
-        if (!fileInputElement.files || fileInputElement.files.length === 0) this.base64image = '';
     }
 
     /**
@@ -89,18 +78,52 @@ export class RegisterComponent {
             } as User)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-                next: () => {
+                next: async () => {
+                    (await this.toastCtrl.create({
+                        duration: 3000,
+                        position: 'bottom',
+                        message: 'User registered!'
+                    })).present();
                     this.saved = true;
-                    this.router.navigate(['/auth/login']);
+                    this.nav.navigateRoot(['/auth/login']);
                 },
                 error: (error) => {
                     // this.registerForm.get('email')?.setErrors({ serverError: true});
                     this.registerErrorCode.set(error.status);
                     this.registerForm.get('email')?.setValue('');
                     this.registerForm.get('repeatEmail')?.setValue('');
-                    window.scrollTo(0, 0);
                 },
             });
+    }
+
+    async takePhoto() {
+        ;
+        const photo = await Camera.getPhoto({
+            source: CameraSource.Camera,
+            quality: 90,
+            height: 640,
+            width: 640,
+            allowEditing: true,
+            resultType: CameraResultType.DataUrl // Base64 (url encoded)
+        });
+
+        this.base64image = photo.dataUrl as string;
+        // this.user.avatar = photo.dataUrl as string;
+        this.changeDetector.markForCheck();
+    }
+
+    async pickFromGallery() {
+        const photo = await Camera.getPhoto({
+            source: CameraSource.Photos,
+            height: 640,
+            width: 640,
+            allowEditing: true,
+            resultType: CameraResultType.DataUrl // Base64 (url encoded)
+        });
+
+        this.base64image = photo.dataUrl as string;
+        // this.user.avatar = photo.dataUrl as string;
+        this.changeDetector.markForCheck();
     }
 
     /**
@@ -109,13 +132,19 @@ export class RegisterComponent {
      * 
      * @returns "True" if the changes were saved, form values were not changed or the user confirms the dialog, otherwise "False".
      */
-    canDeactivate() {
+    async canDeactivate() {
         if (this.saved || this.registerForm.pristine) return true;
-        return confirm();
-            
-        // const modalRef = this.modalService.open(ConfirmModalComponent);
-        // modalRef.componentInstance.title = 'Changes will not be saved';
-        // modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
-        // return modalRef.result.catch(() => false);
+
+        const toast = await this.toastCtrl.create({
+            message: 'Changes will not be saved. Do you want to leave the page?',
+            position: 'bottom',
+            buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                { text: 'Leave', role: 'leave' }
+            ]
+        });
+
+        await toast.present();
+        return (await toast.onDidDismiss()).role === 'leave';
     }
 }

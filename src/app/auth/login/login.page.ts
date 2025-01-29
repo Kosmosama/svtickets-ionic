@@ -1,13 +1,13 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonText, IonLabel, IonAlert, IonButton, IonInput, IonItem, IonList, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
-import { ThirdPartyLogin, UserLogin } from 'src/app/shared/interfaces/user';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Observable } from 'rxjs';
-import { GeolocationService } from '../services/geolocation.service';
-import { AuthService } from '../services/auth.service';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { NavController, IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonLabel, IonList, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { Observable } from 'rxjs';
+import { ThirdPartyLogin, UserLogin } from 'src/app/shared/interfaces/user';
+import { AuthService } from '../services/auth.service';
+import { GeolocationService } from '../services/geolocation.service';
 
 @Component({
     selector: 'app-login',
@@ -19,7 +19,7 @@ import { Router, RouterLink } from '@angular/router';
 export class LoginPage {
     private authService = inject(AuthService);
     private fb = inject(NonNullableFormBuilder);
-    private router = inject(Router);
+    private nav = inject(NavController);
     private destroyRef = inject(DestroyRef);
 
     loginErrorCode = signal<number | null>(null);
@@ -100,7 +100,7 @@ export class LoginPage {
         this.login(user)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-                next: () => { this.router.navigate(['/events']); },
+                next: () => { this.nav.navigateRoot(['/events']); },
                 error: (error) => {
                     this.loginErrorCode.set(error.status);
                 }

@@ -18,8 +18,7 @@
                 @let emailErrors = emailControl?.errors;
 
                 <ion-label for="email">Email:</ion-label>
-                <ion-input type="email" name="email" id="email" placeholder="Email" required formControlName="email">
-                </ion-input>
+                <ion-input type="email" name="email" id="email" placeholder="Email" required formControlName="email"/>
 
                 @if (emailControl?.touched || emailControl?.dirty) {
                     @if (emailErrors?.['required']) {
@@ -36,13 +35,10 @@
                 @let passwordErrors = passwordControl?.errors;
 
                 <ion-label for="password">Password:</ion-label>
-                <ion-input type="password" name="password" id="password" placeholder="Password" required
-                    formControlName="password">
-                </ion-input>
+                <ion-input type="password" name="password" id="password" placeholder="Password" required formControlName="password"/>
 
-                
                 @if (passwordControl?.touched || passwordControl?.dirty) {
-                    @if(passwordErrors?.['required'] && !loginForm.pristine) {
+                    @if(passwordErrors?.['required']) {
                         <ion-text color="danger">Password cannot be empty</ion-text>
                     }
                 }

@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged } from "rxjs";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { EventsResponse } from "../../shared/interfaces/responses";
 import { ProfileService } from "../../profile/services/profile.service";
-import { animate, query, stagger, style, transition, trigger } from "@angular/animations";
+// import { animate, query, stagger, style, transition, trigger } from "@angular/animations";
 // import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 // import { ScrollingModule } from '@angular/cdk/scrolling';
 
@@ -17,19 +17,19 @@ import { animate, query, stagger, style, transition, trigger } from "@angular/an
     imports: [EventCardComponent, ReactiveFormsModule, ], //InfiniteScrollDirective
     templateUrl: "./events-page.component.html",
     styleUrls: ["./events-page.component.css"],
-    animations: [
-        trigger('animateList', [
-            transition(':increment', [
-                query('event-card:enter', [
-                    style({ opacity: 0, transform: 'translateX(-100px)' }),
-                    stagger(
-                        100,
-                        animate('500ms ease-out', style({ opacity: 1, transform: 'none' }))
-                    ),
-                ], { optional: true }),
-            ]),
-        ]),
-    ]
+    // animations: [
+    //     trigger('animateList', [
+    //         transition(':increment', [
+    //             query('event-card:enter', [
+    //                 style({ opacity: 0, transform: 'translateX(-100px)' }),
+    //                 stagger(
+    //                     100,
+    //                     animate('500ms ease-out', style({ opacity: 1, transform: 'none' }))
+    //                 ),
+    //             ], { optional: true }),
+    //         ]),
+    //     ]),
+    // ]
 })
 export class EventsPageComponent {
     private eventsService = inject(EventsService);
