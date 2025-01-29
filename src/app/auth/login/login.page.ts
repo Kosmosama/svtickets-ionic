@@ -1,21 +1,22 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidationClassesDirective } from '../../shared/directives/valdation-classes.directive';
-import { ThirdPartyLogin, UserLogin } from '../../shared/interfaces/user';
-import { GeolocationService } from '../services/geolocation.service';
-import { AuthService } from '../services/auth.service';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonText, IonLabel, IonAlert, IonButton, IonInput, IonItem, IonList, IonGrid, IonRow, IonCol, IonIcon } from '@ionic/angular/standalone';
+import { ThirdPartyLogin, UserLogin } from 'src/app/shared/interfaces/user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
+import { GeolocationService } from '../services/geolocation.service';
+import { AuthService } from '../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'login',
+    selector: 'app-login',
+    templateUrl: './login.page.html',
+    styleUrls: ['./login.page.scss'],
     standalone: true,
-    imports: [ReactiveFormsModule, ValidationClassesDirective, RouterLink, ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.css'
+    imports: [IonIcon, IonCol, IonRow, IonGrid, IonList, IonInput, IonButton, IonAlert, IonLabel, IonText, IonContent, IonLabel, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, RouterLink]
 })
-export class LoginComponent {
+export class LoginPage {
     private authService = inject(AuthService);
     private fb = inject(NonNullableFormBuilder);
     private router = inject(Router);
@@ -37,6 +38,7 @@ export class LoginComponent {
         return new Observable<void>((observer) => {
             GeolocationService.getLocation()
                 .then((coords) => {
+                    console.log(coords);
                     user.lat = coords.latitude;
                     user.lng = coords.longitude;
                 })
@@ -99,7 +101,7 @@ export class LoginComponent {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
                 next: () => { this.router.navigate(['/events']); },
-                error: (error) => { 
+                error: (error) => {
                     this.loginErrorCode.set(error.status);
                 }
             });

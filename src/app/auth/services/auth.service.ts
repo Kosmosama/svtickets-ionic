@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable, Signal, signal, WritableSignal } from "@angular/core";
 // import { CookieService } from "ngx-cookie-service";
-import { catchError, map, Observable, of } from "rxjs";
+import { catchError, from, map, Observable, of, switchMap } from "rxjs";
 import { TokenResponse } from "../../shared/interfaces/responses";
 import { ThirdPartyLogin, User, UserLogin } from "../../shared/interfaces/user";
+import { Preferences } from "@capacitor/preferences";
 // import { SsrCookieService } from "./ssr-cookie.service";
 
 @Injectable({
@@ -39,9 +40,13 @@ export class AuthService {
         return this.http
             .post<TokenResponse>(endpoint, payload)
             .pipe(
-                map(({ accessToken }: TokenResponse) => {
-                    // this.cookieService.set("token", accessToken, 365, "/");
-                    this.#logged.set(true);
+                switchMap(async ({ accessToken }: TokenResponse) => {
+                    try {
+                        await Preferences.set({ key: 'fs-token', value: accessToken });
+                        this.#logged.set(true);
+                    } catch (e) {
+                        throw new Error('Can\'t save authentication token in storage!');
+                    }
                 })
             );
     }
@@ -49,8 +54,8 @@ export class AuthService {
     /**
      * Logs out the user by clearing the authentication token and updating the logged-in state.
      */
-    logout(): void {
-        // this.cookieService.delete("token", "/");
+    async logout(): Promise<void> {
+        await Preferences.remove({ key: 'fs-token' });
         this.#logged.set(false);
     }
 
@@ -67,20 +72,14 @@ export class AuthService {
      * Validates the provided authentication token.
      * @returns {Observable<boolean>} An observable emitting true if the token is valid, or false otherwise.
      */
-    private validateToken(): Observable<boolean> {
-        return this.http
-            .get("auth/validate")
-            .pipe(
-                map(() => {
-                    this.#logged.set(true);
-                    return true;
-                }),
-                catchError(() => {
-                    // this.cookieService.delete("token", "/");
-                    this.#logged.set(false);
-                    return of(false);
-                })
-            );
+    private validateToken(token: string | null): Observable<boolean> {
+        return this.http.get('auth/validate').pipe(
+            map(() => {
+                this.#logged.set(true);
+                return true;
+            }),
+            catchError(() => of(false))
+        );
     }
 
     /**
@@ -88,15 +87,14 @@ export class AuthService {
      * @returns {Observable<boolean>} An observable emitting true if the user is logged in, or false otherwise.
      */
     isLogged(): Observable<boolean> {
-        // const token = this.ssrCookieService.getCookie('token');
-
-        // User is logged if signal is true
         if (this.#logged()) return of(true);
+        
+        return from(Preferences.get({ key: 'fs-token' })).pipe(
+            switchMap((token) => {
+                if (!token) return of(false);
 
-        // User is not logged and token is missing
-        // if (!token) return of(false);
-
-        // Token exists, validate it
-        return this.validateToken();
+                return this.validateToken(token.value)
+            })
+        );
     }
 }

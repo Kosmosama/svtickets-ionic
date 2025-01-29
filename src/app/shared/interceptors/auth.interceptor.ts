@@ -1,15 +1,20 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { SsrCookieService } from '../../auth/services/ssr-cookie.service';
+import { Preferences } from '@capacitor/preferences';
+import { from, switchMap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const token = inject(SsrCookieService).getCookie('token');
 
-    if (token) { // Estamos autenticados
-        const authReq = req.clone({
-            headers: req.headers.set('Authorization', 'Bearer ' + token),
-        });
-        return next(authReq); // Petición con credenciales
-    }
-    return next(req); // Petición sin credenciales
+    return from(Preferences.get({ key: 'fs-token' })).pipe(
+        switchMap((token) => { // switchMap es necesario ya que tiene que devolver otro observable (llamada a next)
+            if (!token.value) {
+                return next(req); // Enviamos petición sin token
+            }
+
+            const authReq = req.clone({
+                headers: req.headers.set('Authorization', `bearer ${token.value}`),
+            });
+            // Enviamos la petición clonada con el token
+            return next(authReq);
+        })
+    );
 };
