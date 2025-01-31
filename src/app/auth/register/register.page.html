@@ -22,7 +22,7 @@
 
                 @if (nameControl?.touched || nameControl?.dirty) {
                 @if(nameErrors?.['required']) {
-                <ion-text class="invalid-feedback">Name cannot be empty.</ion-text>
+                <ion-text color="danger">Name cannot be empty.</ion-text>
                 }
                 }
             </div>
@@ -35,11 +35,11 @@
 
                 @if (emailControl?.touched || emailControl?.dirty) {
                 @if(emailErrors?.['required']) {
-                <ion-text class="invalid-feedback">Email cannot be empty.</ion-text>
+                <ion-text color="danger">Email cannot be empty.</ion-text>
                 }
 
                 @if(emailErrors?.['email']) {
-                <ion-text class="invalid-feedback">Email must be an email.</ion-text>
+                <ion-text color="danger">Email must be an email.</ion-text>
                 }
                 }
             </div>
@@ -53,14 +53,14 @@
 
                 @if (repeatEmailControl?.touched || repeatEmailControl?.dirty) {
                 @if(repeatEmailErrors?.['required']) {
-                <ion-text class="invalid-feedback">Email cannot be empty.</ion-text>
+                <ion-text color="danger">Email cannot be empty.</ion-text>
                 }
 
                 @if(repeatEmailErrors?.['email']) {
-                <ion-text class="invalid-feedback">Email must be an email.</ion-text>
+                <ion-text color="danger">Email must be an email.</ion-text>
                 }
                 @else if (repeatEmailErrors?.['emailMismatch']) {
-                <ion-text class="invalid-feedback">Emails do not match.</ion-text>
+                <ion-text color="danger">Emails do not match.</ion-text>
                 }
                 }
             </div>
@@ -74,13 +74,13 @@
 
 
                 @if (passwordControl?.touched || passwordControl?.dirty) {
-                @if(passwordErrors?.['required']) {
-                <ion-text class="invalid-feedback">Password cannot be empty.</ion-text>
-                }
+                    @if(passwordErrors?.['required']) {
+                    <ion-text color="danger">Password cannot be empty.</ion-text>
+                    }
 
-                @if(passwordErrors?.['minlength']) {
-                <ion-text class="invalid-feedback">Password must be at least 4 characters long.</ion-text>
-                }
+                    @if(passwordErrors?.['minlength']) {
+                    <ion-text color="danger">Password must be at least 4 characters long.</ion-text>
+                    }
                 }
             </div>
             <div class="form-row">

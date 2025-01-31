@@ -7,7 +7,7 @@ import { User } from '../../shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
 import { GeolocationService } from '../services/geolocation.service';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-
+// #TODO Use capacitor geolocation
 @Component({
     selector: 'app-register',
     templateUrl: './register.page.html',
@@ -97,32 +97,29 @@ export class RegisterPage {
     }
 
     async takePhoto() {
-        ;
         const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
             quality: 90,
-            height: 640,
-            width: 640,
+            height: 200,
+            width: 200,
             allowEditing: true,
             resultType: CameraResultType.DataUrl // Base64 (url encoded)
         });
 
         this.base64image = photo.dataUrl as string;
-        // this.user.avatar = photo.dataUrl as string;
         this.changeDetector.markForCheck();
     }
 
     async pickFromGallery() {
         const photo = await Camera.getPhoto({
             source: CameraSource.Photos,
-            height: 640,
-            width: 640,
+            height: 200,
+            width: 200,
             allowEditing: true,
             resultType: CameraResultType.DataUrl // Base64 (url encoded)
         });
 
         this.base64image = photo.dataUrl as string;
-        // this.user.avatar = photo.dataUrl as string;
         this.changeDetector.markForCheck();
     }
 

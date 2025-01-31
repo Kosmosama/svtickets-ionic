@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 import { ThirdPartyLogin, UserLogin } from 'src/app/shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
 import { GeolocationService } from '../services/geolocation.service';
-
+// #TODO Use capacitor geolocation
+// #TODO Check html redirections (from all components)
 @Component({
     selector: 'app-login',
     templateUrl: './login.page.html',

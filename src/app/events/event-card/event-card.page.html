@@ -1,0 +1,61 @@
+<ion-col>
+    <ion-card class="h-100 shadow">
+        <a [routerLink]="['/events', event().id]">
+            @if (error()) {
+            <div class="card-img-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                        d="M21 7v10c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2zm-10 9c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm7-7h-4.17L16 7H8l1.17 2H5v10h14V9z">
+                    </path>
+                </svg>
+            </div>
+            }
+            @else {
+            <img class="card-img-top" [src]="event().image" [alt]="event().title" (error)="imageNotFound()" />
+            }
+        </a>
+        <ion-card-content>
+            <a class="text-decoration-none" [routerLink]="['/events', event().id]">
+                <ion-card-title>{{ event().title }}</ion-card-title>
+            </a>
+            <p>{{ event().description }}</p>
+            @if (event().mine) {
+            <ion-button expand="full" fill="solid" color="primary"
+                [routerLink]="['/events', 'edit', event().id]">Edit</ion-button>
+            }
+            <ion-grid>
+                <ion-row>
+                    @if (event().mine) {
+                    <ion-button (click)="presentActionSheet()">Open</ion-button>
+                    }
+                    <ion-col class="ion-text-end">
+                        <div class="attend-users">
+                            <ion-icon name="people-outline"></ion-icon> {{ event().numAttend }}
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="auto" class="avatar">
+                        <a [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">
+                            <img [src]="event().creator.avatar" class="rounded-circle" [alt]="event().creator.name" />
+                        </a>
+                    </ion-col>
+                    <ion-col>
+                        <div class="name"><a
+                                [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">{{
+                                event().creator.name }}</a></div>
+                        <div class="date small text-muted">{{ event().date | date : "dd/MM/yyyy" }}</div>
+                    </ion-col>
+                    <ion-col size="auto" class="ion-text-end text-muted">
+                        <div class="price small">{{ event().price | currency : "EUR" : "es-ES" }}</div>
+                        <div class="distance small">{{ event().distance | eventDistance }}</div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+</ion-col>
