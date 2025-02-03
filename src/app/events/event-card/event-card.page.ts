@@ -100,7 +100,7 @@ export class EventCardPage {
         this.eventsService
             .deleteEvent(this.event().id!)
             .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe(() => {
+            .subscribe(() => { // #TODO use next error?
                 this.presentToast('Event deleted successfully.');
                 this.deleted.emit(this.event().id!);
             });

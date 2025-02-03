@@ -1,5 +1,4 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { EventCardComponent } from "../event-card/event-card.component";
 import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { Comment, MyEvent } from '../../shared/interfaces/my-event';
@@ -10,11 +9,12 @@ import { User } from '../../shared/interfaces/user';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { EventsService } from '../services/events.service';
+import { EventCardPage } from '../event-card/event-card.page';
 
 @Component({
     selector: 'event-detail',
     standalone: true,
-    imports: [EventCardComponent, ValidationClassesDirective, RouterLink, ReactiveFormsModule, DatePipe],// , OlMapDirective, OlMarkerDirective
+    imports: [ValidationClassesDirective, RouterLink, ReactiveFormsModule, DatePipe],// , OlMapDirective, OlMarkerDirective
     templateUrl: './event-detail.component.html',
     styleUrl: './event-detail.component.css'
 })

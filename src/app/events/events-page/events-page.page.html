@@ -1,13 +1,53 @@
-<ion-header [translucent]="true">
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Events</ion-title>
+        <ion-searchbar type="text" name="search" id="search" placeholder="Search" aria-label="Search"
+            [formControl]="searchControl"></ion-searchbar>
+    </ion-toolbar>
     <ion-toolbar>
-        <ion-title>eventsPage</ion-title>
+        <ion-buttons slot="start">
+            <ion-button (click)="orderBy('distance')">Order by Distance</ion-button>
+            <ion-button (click)="orderBy('date')">Order by Date</ion-button>
+            <ion-button (click)="orderBy('price')">Order by Price</ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">eventsPage</ion-title>
-        </ion-toolbar>
-    </ion-header>
+    <ion-refresher #refresher slot="fixed" (ionRefresh)="refresh(refresher)">
+        <ion-refresher-content>
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="secondary" [routerLink]="['/products/add']" [routerDirection]="'root'">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+    <!-- [@animateList]="events().length" -->
+    <ion-list style="padding-bottom: 50px">
+        @if (events().length) {
+            @for (event of events(); track event.id) {
+            <app-event-card [event]="event" (deleted)="handleEventDeleted($event)"></app-event-card>
+            }
+        }
+        @else {
+        <div class="col">
+            <ion-card color="danger">
+                <ion-card-header>
+                    <ion-card-title>No events found</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    Please try adjusting your search criteria.
+                </ion-card-content>
+            </ion-card>
+        </div>
+        }
+    </ion-list>
+
+    <ion-infinite-scroll #infinite (ionInfinite)="loadMoreEvents()" [disabled]="!more()">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

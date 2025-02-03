@@ -101,7 +101,7 @@ export class LoginPage {
         this.login(user)
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-                next: () => { this.nav.navigateRoot(['/events']); },
+                next: () => this.nav.navigateRoot(['/events']),
                 error: (error) => {
                     this.loginErrorCode.set(error.status);
                 }
