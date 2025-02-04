@@ -1,5 +1,5 @@
 <ion-col>
-    <ion-card class="h-100 shadow">
+    <ion-card class="card h-100 shadow">
         <a [routerLink]="['/events', event().id]">
             @if (error()) {
             <div class="card-img-placeholder">
@@ -14,41 +14,58 @@
             <img class="card-img-top" [src]="event().image" [alt]="event().title" (error)="imageNotFound()" />
             }
         </a>
-        <ion-card-content>
-            <a class="text-decoration-none" [routerLink]="['/events', event().id]">
-                <ion-card-title>{{ event().title }}</ion-card-title>
-            </a>
-            <p>{{ event().description }}</p>
-            @if (event().mine) {
-            <ion-button expand="full" fill="solid" color="primary"
-                [routerLink]="['/events', 'edit', event().id]">Edit</ion-button>
-            }
+        <ion-card-content class="card-body">
+            <ion-card-title class="card-title">
+                <a class="text-decoration-none" [routerLink]="['/events', event().id]">
+                {{ event().title }}
+                </a>
+            </ion-card-title>
+            <p class="card-text">{{ event().description }}</p>
+
             <ion-grid>
-                <ion-row>
+                <ion-row class="row space-between">
+                    <ion-col>
                     @if (event().mine) {
-                    <ion-button (click)="presentActionSheet()">Open</ion-button>
+                        <ion-button (click)="presentActionSheet()">Actions</ion-button>
                     }
-                    <ion-col class="ion-text-end">
-                        <div class="attend-users">
-                            <ion-icon name="people-outline"></ion-icon> {{ event().numAttend }}
-                        </div>
+                    </ion-col>
+                    <ion-col size="auto" class="ion-text-end">
+                        <ion-row class="ion-align-items-center ion-justify-content-end">
+                            <ion-icon name="people-sharp" class="padding-right"></ion-icon> 
+                            {{ event().numAttend }}
+                        </ion-row>
+                        <ion-row class="ion-align-items-center ion-justify-content-end" [ngStyle]="{'color': event().attend ? '#198754' : '#DF4655'}">
+                            @if (event().attend) {
+                                <ion-icon name="thumbs-up-sharp" class="padding-right"></ion-icon>
+                            }
+                            @else {
+                                <ion-icon name="thumbs-down-sharp" class="padding-right"></ion-icon>
+                            }
+                            {{ event().attend ? 'I\'m going' : 'Not going' }}
+                        </ion-row>
                     </ion-col>
                 </ion-row>
             </ion-grid>
         </ion-card-content>
         <ion-card-content>
             <ion-grid>
-                <ion-row>
-                    <ion-col size="auto" class="avatar">
-                        <a [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">
-                            <img [src]="event().creator.avatar" class="rounded-circle" [alt]="event().creator.name" />
-                        </a>
-                    </ion-col>
-                    <ion-col>
-                        <div class="name"><a
-                                [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">{{
-                                event().creator.name }}</a></div>
-                        <div class="date small text-muted">{{ event().date | date : "dd/MM/yyyy" }}</div>
+                <ion-row class="card-footer text-muted row m-0">
+                    <ion-col style="display: flex; flex-direction: row;">
+                        <div class="avatar">
+                            <a [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">
+                                <img [src]="event().creator.avatar" class="rounded-circle" [alt]="event().creator.name" />
+                            </a>
+                        </div>
+                        <div class="ion-padding-start">
+                            <ion-row class="name">
+                                <a [routerLink]="event().mine ? ['/profile'] : ['/profile', event().creator.id]">
+                                    {{ event().creator.name }}
+                                </a>
+                            </ion-row>
+                            <ion-row class="date small text-muted">
+                                {{ event().date | date : "dd/MM/yyyy" }}
+                            </ion-row>
+                        </div>
                     </ion-col>
                     <ion-col size="auto" class="ion-text-end text-muted">
                         <div class="price small">{{ event().price | currency : "EUR" : "es-ES" }}</div>

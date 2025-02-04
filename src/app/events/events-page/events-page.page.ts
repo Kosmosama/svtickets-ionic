@@ -1,22 +1,23 @@
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
+import { IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent, IonLoading, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
 import { ProfileService } from 'src/app/profile/services/profile.service';
 import { MyEvent } from 'src/app/shared/interfaces/my-event';
 import { EventsResponse } from 'src/app/shared/interfaces/responses';
 import { EventCardPage } from '../event-card/event-card.page';
 import { EventsService } from '../services/events.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
     selector: 'app-events-page',
     templateUrl: './events-page.page.html',
     styleUrls: ['./events-page.page.scss'],
     standalone: true,
-    imports: [IonSearchbar, IonInfiniteScrollContent, IonInfiniteScroll, RouterLink, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonList, IonIcon, IonFabButton, IonFab, IonRefresherContent, IonRefresher, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, EventCardPage],
+    imports: [IonCol, IonRow, IonGrid, IonSearchbar, IonInfiniteScrollContent, IonInfiniteScroll, RouterLink, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonIcon, IonFabButton, IonFab, IonRefresherContent, IonRefresher, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, EventCardPage],
 })
 export class EventsPagePage {
     private eventsService = inject(EventsService);
@@ -32,8 +33,15 @@ export class EventsPagePage {
     pageToLoad = signal<number>(1);
     filterSummary = signal<string>("");
 
+    firstRenderFinished = false;
+
     searchControl = new FormControl("");
-    searchValue = signal<string | null>("");
+    searchValue = toSignal(
+        this.searchControl.valueChanges.pipe(
+            debounceTime(600),
+            distinctUntilChanged()
+        )
+    );
 
     constructor() {
         effect(() => {
@@ -51,6 +59,8 @@ export class EventsPagePage {
 
                     if (this.pageToLoad() === 1) this.events.set(response.events);
                     else this.events.update((events) => [...events, ...response.events]);
+                
+                    this.firstRenderFinished = true;
                 });
         });
 

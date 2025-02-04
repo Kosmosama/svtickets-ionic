@@ -1,19 +1,20 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, DestroyRef, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ToastController, AlertController, NavController, ActionSheetController, IonButton, IonCard, IonCardContent, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonRow, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { ActionSheetController, AlertController, IonButton, IonCard, IonCardContent, IonCardTitle, IonCol, IonGrid, IonIcon, IonRow, NavController, ToastController, IonLabel, IonItemDivider } from '@ionic/angular/standalone';
 import { MyEvent } from 'src/app/shared/interfaces/my-event';
 import { EventDistancePipe } from 'src/app/shared/pipes/event-distance.pipe';
 import { EventsService } from '../services/events.service';
+import { CurrencyPipe } from 'src/app/shared/pipes/currency.pipe';
 
 @Component({
     selector: 'app-event-card',
     templateUrl: './event-card.page.html',
     styleUrls: ['./event-card.page.scss'],
     standalone: true,
-    imports: [EventDistancePipe, RouterLink, IonRow, IonGrid, IonButton, IonCardTitle, IonCardContent, IonCol, IonCard, IonIcon, CommonModule, FormsModule]
+    imports: [EventDistancePipe, RouterLink, IonRow, IonGrid, IonButton, IonCardTitle, IonCardContent, IonCol, IonCard, IonIcon, CommonModule, FormsModule, CurrencyPipe, DatePipe]
 })
 export class EventCardPage {
     private destroyRef = inject(DestroyRef);
@@ -37,7 +38,7 @@ export class EventCardPage {
                 {
                     text: 'Delete',
                     role: 'destructive',
-                    icon: 'trash',
+                    icon: 'trash-bin-sharp',
                     handler: () => this.confirmDelete(),
                 },
                 {

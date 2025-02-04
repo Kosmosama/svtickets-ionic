@@ -26,25 +26,29 @@
     </ion-fab>
 
     <!-- [@animateList]="events().length" -->
-    <ion-list style="padding-bottom: 50px">
-        @if (events().length) {
-            @for (event of events(); track event.id) {
-            <app-event-card [event]="event" (deleted)="handleEventDeleted($event)"></app-event-card>
+    <ion-grid class="mb-4 mt-4">
+        <ion-row>
+            @if (events().length) {
+                @for (event of events(); track event.id) {
+                <ion-col size="12" size-md="6" size-xl="4">
+                    <app-event-card [event]="event" (deleted)="handleEventDeleted($event)"></app-event-card>
+                </ion-col>
+                }
             }
-        }
-        @else {
-        <div class="col">
-            <ion-card color="danger">
-                <ion-card-header>
-                    <ion-card-title>No events found</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                    Please try adjusting your search criteria.
-                </ion-card-content>
-            </ion-card>
-        </div>
-        }
-    </ion-list>
+            @else if (firstRenderFinished) {
+                <div class="col">
+                    <ion-card color="danger">
+                        <ion-card-header>
+                            <ion-card-title>No events found</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content>
+                            Please try adjusting your search criteria.
+                        </ion-card-content>
+                    </ion-card>
+                </div>
+            }
+        </ion-row>
+    </ion-grid>
 
     <ion-infinite-scroll #infinite (ionInfinite)="loadMoreEvents()" [disabled]="!more()">
         <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
