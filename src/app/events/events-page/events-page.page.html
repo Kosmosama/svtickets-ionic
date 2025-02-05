@@ -2,7 +2,7 @@
     <ion-toolbar color="primary">
         <ion-title>Events</ion-title>
         <ion-searchbar type="text" name="search" id="search" placeholder="Search" aria-label="Search"
-            [formControl]="searchControl"></ion-searchbar>
+            [formControl]="searchControl" debounce="600"></ion-searchbar>
     </ion-toolbar>
     <ion-toolbar>
         <ion-buttons slot="start">
@@ -14,7 +14,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <ion-refresher #refresher slot="fixed" (ionRefresh)="refresh(refresher)">
+    <ion-refresher slot="fixed" (ionRefresh)="refresh()">
         <ion-refresher-content>
         </ion-refresher-content>
     </ion-refresher>

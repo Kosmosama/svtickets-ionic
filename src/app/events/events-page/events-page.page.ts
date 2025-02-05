@@ -1,6 +1,6 @@
 import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,6 +23,9 @@ export class EventsPagePage {
     private eventsService = inject(EventsService);
     private profileService = inject(ProfileService);
     private destroyRef = inject(DestroyRef);
+    
+    private refresher = viewChild(IonRefresher);
+    private infinite = viewChild(IonInfiniteScroll);
 
     creator = input<number>();
     attending = input<number>();
@@ -57,10 +60,16 @@ export class EventsPagePage {
                 .subscribe((response: EventsResponse) => {
                     this.more.set(response.more);
 
-                    if (this.pageToLoad() === 1) this.events.set(response.events);
-                    else this.events.update((events) => [...events, ...response.events]);
+                    if (this.pageToLoad() === 1) {
+                        this.events.set(response.events);
+                        this.firstRenderFinished = true;
+                    }
+                    else {
+                        this.events.update((events) => [...events, ...response.events]);
+                    }
                 
-                    this.firstRenderFinished = true;
+                    this.refresher()?.complete();
+                    this.infinite()?.complete();
                 });
         });
 
@@ -94,20 +103,15 @@ export class EventsPagePage {
      * Updates orderCriteria criteria signal.
      */
     orderBy(method: "distance" | "date" | "price"): void {
-        this.pageToLoad.set(1);
+        this.refresh();
         this.orderCriteria.set(method);
     }
 
     /**
-     * Refreshes the current page by resetting the page number to 1 (to trigger the effect function) and completing the refresher action.
-     * 
-     * @param refresher - The IonRefresher instance that triggers the refresh action.
+     * Refreshes the current page.
      */
-    refresh(refresher: IonRefresher) {
-        setTimeout(() => {
-            this.pageToLoad.set(1);
-            refresher.complete();
-        }, 2000);
+    refresh() {
+        this.pageToLoad.set(1);
     }
 
     /**

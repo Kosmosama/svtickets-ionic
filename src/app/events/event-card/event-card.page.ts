@@ -32,7 +32,6 @@ export class EventCardPage {
 
     async presentActionSheet() {
         const actionSheet = await this.actionSheetCtrl.create({
-            // #TODO Change icons
             header: 'Actions',
             buttons: [
                 {
