@@ -5,7 +5,7 @@ import { eventResolver } from "./resolvers/event.resolver";
 
 export const routes: Routes = [
     { path: "", data: { animation: 'events' }, loadComponent: () => import("./events-page/events-page.page").then((c) => c.EventsPagePage), title: "Events | SVtickets" },
-    { path: "add", data: { animation: 'eventAdd' }, canDeactivate: [leavePageGuard], loadComponent: () => import("./event-form/event-form.component").then((c) => c.EventFormComponent), title: "New Event | SVtickets" },
+    { path: "add", data: { animation: 'eventAdd' }, canDeactivate: [leavePageGuard], loadComponent: () => import("./event-form/event-form.page").then((c) => c.EventFormPage), title: "New Event | SVtickets" },
     { path: ":id", data: { animation: 'eventDetail' }, canActivate: [numericIdGuard], loadComponent: () => import("./event-detail/event-detail.component").then((c) => c.EventDetailComponent), resolve: { event: eventResolver }, title: "Event | SVtickets" },
-    { path: "edit/:id", data: { animation: 'eventEdit' }, canActivate: [numericIdGuard], canDeactivate: [leavePageGuard], loadComponent: () => import("./event-form/event-form.component").then((c) => c.EventFormComponent), resolve: { event: eventResolver }, title: "Edit event | SVtickets" },
+    { path: "edit/:id", data: { animation: 'eventEdit' }, canActivate: [numericIdGuard], canDeactivate: [leavePageGuard], loadComponent: () => import("./event-form/event-form.page").then((c) => c.EventFormPage), resolve: { event: eventResolver }, title: "Edit event | SVtickets" },
 ];

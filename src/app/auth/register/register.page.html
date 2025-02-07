@@ -21,9 +21,9 @@
                 <ion-input type="text" id="name" name="name" placeholder="Name" formControlName="name" />
 
                 @if (nameControl?.touched || nameControl?.dirty) {
-                @if(nameErrors?.['required']) {
-                <ion-text color="danger">Name cannot be empty.</ion-text>
-                }
+                    @if(nameErrors?.['required']) {
+                    <ion-text color="danger">Name cannot be empty.</ion-text>
+                    }
                 }
             </div>
             <div class="mb-3">
@@ -34,13 +34,13 @@
                 <ion-input type="email" name="email" id="email" placeholder="Email" required formControlName="email" />
 
                 @if (emailControl?.touched || emailControl?.dirty) {
-                @if(emailErrors?.['required']) {
-                <ion-text color="danger">Email cannot be empty.</ion-text>
-                }
+                    @if(emailErrors?.['required']) {
+                    <ion-text color="danger">Email cannot be empty.</ion-text>
+                    }
 
-                @if(emailErrors?.['email']) {
-                <ion-text color="danger">Email must be an email.</ion-text>
-                }
+                    @if(emailErrors?.['email']) {
+                    <ion-text color="danger">Email must be an email.</ion-text>
+                    }
                 }
             </div>
             <div class="mb-3">
@@ -52,16 +52,16 @@
                     formControlName="repeatEmail" />
 
                 @if (repeatEmailControl?.touched || repeatEmailControl?.dirty) {
-                @if(repeatEmailErrors?.['required']) {
-                <ion-text color="danger">Email cannot be empty.</ion-text>
-                }
+                    @if(repeatEmailErrors?.['required']) {
+                    <ion-text color="danger">Email cannot be empty.</ion-text>
+                    }
 
-                @if(repeatEmailErrors?.['email']) {
-                <ion-text color="danger">Email must be an email.</ion-text>
-                }
-                @else if (repeatEmailErrors?.['emailMismatch']) {
-                <ion-text color="danger">Emails do not match.</ion-text>
-                }
+                    @if(repeatEmailErrors?.['email']) {
+                    <ion-text color="danger">Email must be an email.</ion-text>
+                    }
+                    @else if (repeatEmailErrors?.['emailMismatch']) {
+                    <ion-text color="danger">Emails do not match.</ion-text>
+                    }
                 }
             </div>
             <div class="mb-3">
@@ -112,7 +112,6 @@
         <img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
         }
 
-        <!-- [routerDirection]="'root'" -->
         <ion-grid>
             <ion-row>
                 <ion-col>
@@ -123,7 +122,6 @@
                 </ion-col>
                 <ion-col>
                     <ion-button type="submit" color="primary" [disabled]="registerForm.invalid || !base64image">
-                        <!-- || !base64image -->
                         <ion-icon name="person-add-outline" slot="start"></ion-icon>
                         Register
                     </ion-button>

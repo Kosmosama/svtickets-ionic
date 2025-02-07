@@ -96,6 +96,11 @@ export class RegisterPage {
             });
     }
 
+    /**
+     * Captures a photo using the device camera.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the photo has been taken and processed.
+     */
     async takePhoto() {
         const photo = await Camera.getPhoto({
             source: CameraSource.Camera,
@@ -110,6 +115,11 @@ export class RegisterPage {
         this.changeDetector.markForCheck();
     }
 
+    /**
+     * Picks an image from the device.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the photo is picked and processed.
+     */
     async pickFromGallery() {
         const photo = await Camera.getPhoto({
             source: CameraSource.Photos,
@@ -130,7 +140,7 @@ export class RegisterPage {
      * @returns "True" if the changes were saved, form values were not changed or the user confirms the dialog, otherwise "False".
      */
     async canDeactivate() {
-        if (this.saved || this.registerForm.pristine) return true;
+        if (this.saved || (this.registerForm.pristine && this.base64image === "")) return true;
 
         const toast = await this.toastCtrl.create({
             message: 'Changes will not be saved. Do you want to leave the page?',

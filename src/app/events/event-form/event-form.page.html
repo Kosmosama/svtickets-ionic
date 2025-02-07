@@ -1,0 +1,117 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-title>{{ event() ? "Edit Event" : "Add event" }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <form action="#" class="mt-4" id="newEvent" (ngSubmit)="submitNewEvent()" [formGroup]="eventForm">
+
+        @if(addEventErrorCode()) {
+        <ion-alert message="Unexpected error occurred." color="danger" isOpen="true"></ion-alert>
+        }
+
+        <ion-list>
+            <div class="mb-3">
+                @let titleControl = eventForm.get('title');
+                @let titleErrors = titleControl?.errors;
+
+                <ion-label for="title" class="form-label">Title</ion-label>
+                <ion-input type="text" class="form-control" name="title" id="title" placeholder="Enter title"
+                    formControlName="title" />
+
+                @if (titleControl?.touched || titleControl?.dirty) {
+                    @if(titleErrors?.['required']) {
+                    <ion-text color="danger">Title cannot be empty</ion-text>
+                    }
+
+                    @if(titleErrors?.['pattern']) {
+                    <ion-text color="danger">
+                        Title must start with a letter and can only contain letters and spaces
+                    </ion-text>
+                    } 
+                    @else if (titleErrors?.['minlength']){
+                    <ion-text color="danger">
+                        You must enter at least
+                        {{titleErrors?.['minlength'].requiredLength - titleErrors?.['minlength'].actualLength}}
+                        characters more
+                    </ion-text>
+                    }
+                }
+            </div>
+            <div class="mb-3">
+                @let dateControl = eventForm.get('date'); 
+                @let dateErrors = dateControl?.errors;
+
+                <ion-label for="date" class="form-label">Date</ion-label>
+                <ion-input type="date" class="form-control" id="date" name="date" formControlName="date" />
+
+                @if (dateControl?.touched || dateControl?.dirty) {
+                    @if (dateErrors?.['required']) {
+                    <ion-text color="danger">Date is required.</ion-text>
+                    }
+                    @if (dateErrors?.['minDate']) {
+                    <ion-text color="danger">The date can't be before {{today | date:'MM/dd/yyyy'}}</ion-text>
+                    }
+                }
+            </div>
+            <div class="mb-3">
+                @let descControl = eventForm.get('description'); 
+                @let descErrors = descControl?.errors;
+
+                <ion-label for="description" class="form-label">Description</ion-label>
+                <ion-textarea class="form-control" id="description" name="description" rows="3" formControlName="description"></ion-textarea>
+
+                @if (descControl?.touched || descControl?.dirty) {
+                    @if (descErrors?.['required']) {
+                    <ion-text color="danger">Description is required.</ion-text>
+                    }
+                }
+            </div>
+            <div class="mb-3">
+                @let priceControl = eventForm.get('price'); 
+                @let priceErrors = priceControl?.errors;
+
+                <ion-label for="price" class="form-label">Price (in €)</ion-label>
+                <ion-input type="number" class="form-control" id="price" name="price" min="0.00" max="10000.00" step="0.01" formControlName="price" />
+
+                @if (priceControl?.touched || priceControl?.dirty) {
+                    @if (priceErrors?.['required']) {
+                    <ion-text color="danger">Price is required.</ion-text>
+                    }
+                    @if (priceErrors?.['min']) {
+                    <ion-text color="danger">Price must be a positive number.</ion-text>
+                    }
+                }
+            </div>
+            <ion-item class="mb-3">
+                <ion-button color="tertiary" (click)="pickFromGallery()">
+                    <ion-icon name="images" slot="start"></ion-icon>
+                    Select photo from gallery
+                </ion-button>
+            </ion-item>
+        </ion-list>
+
+        @if (base64image) {
+        <img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
+        }
+
+        <!-- <div class="map-container">
+            <ol-map [coordinates]="coordinates()">
+                <ga-autocomplete (locationChange)="changePlace($event)"></ga-autocomplete>
+                <ol-marker [coordinates]="coordinates()"></ol-marker>
+            </ol-map>
+        </div> -->
+
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-button type="submit" color="primary" [disabled]="eventForm.invalid || !base64image">
+                        <ion-icon name="add-sharp" slot="start"></ion-icon>
+                        {{ event() ? "Modify" : "Create" }}
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>

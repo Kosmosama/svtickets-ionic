@@ -1,42 +1,36 @@
-import { DatePipe } from "@angular/common";
-import { Component, DestroyRef, effect, inject, input, signal } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
-// import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-// import { GaAutocompleteDirective } from "../../ol-maps/ga-autocomplete.directive";
-// import { OlMapDirective } from "../../ol-maps/ol-map.directive";
-// import { OlMarkerDirective } from "../../ol-maps/ol-marker.directive";
-// import { SearchResult } from "../../ol-maps/search-result";
-import { EncodeBase64Directive } from "../../shared/directives/encode-base64.directive";
-import { minDateValidator } from "../../shared/directives/min-date.directive";
-import { ValidationClassesDirective } from "../../shared/directives/valdation-classes.directive";
-import { CanComponentDeactivate } from "../../shared/interfaces/can-component-deactivate";
-import { MyEvent, MyEventInsert } from "../../shared/interfaces/my-event";
-// import { ConfirmModalComponent } from "../../shared/modals/confirm-modal/confirm-modal.component";
-import { EventsService } from "../services/events.service";
+import { DatePipe } from '@angular/common';
+import { ChangeDetectorRef, Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { IonTextarea, IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonRow, IonText, IonTitle, IonToolbar, NavController, ToastController } from '@ionic/angular/standalone';
+import { minDateValidator } from 'src/app/shared/directives/min-date.directive';
+import { MyEvent, MyEventInsert } from 'src/app/shared/interfaces/my-event';
+import { EventsService } from '../services/events.service';
 
 @Component({
-    selector: "event-form",
+    selector: 'app-event-form',
+    templateUrl: './event-form.page.html',
+    styleUrls: ['./event-form.page.scss'],
     standalone: true,
-    imports: [ReactiveFormsModule, EncodeBase64Directive, ValidationClassesDirective, DatePipe], //, OlMapDirective, OlMarkerDirective, GaAutocompleteDirective
-    templateUrl: "./event-form.component.html",
-    styleUrl: "./event-form.component.css"
+    imports: [IonTextarea, IonGrid, IonRow, IonCol, IonText, IonInput, IonLabel, IonItem, IonList, IonAlert, IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, ReactiveFormsModule, DatePipe]
 })
-export class EventFormComponent implements CanComponentDeactivate {
+export class EventFormPage {
     private eventsService = inject(EventsService);
     private destroyRef = inject(DestroyRef);
-    private router = inject(Router);
-    // private modalService = inject(NgbModal);
+    private nav = inject(NavController);
+    private changeDetector = inject(ChangeDetectorRef);
+    private toastCtrl = inject(ToastController);
 
     event = input<MyEvent>();
 
-    saved = false;
     today: string = new Date().toISOString().split('T')[0];
+    coordinates = signal<[number, number]>([-0.5, 38.5]);
+    addEventErrorCode = signal<number | null>(null);
+    
+    saved = false;
     base64image = "";
     address = "";
-    coordinates = signal<[number, number]>([-0.5, 38.5]);
-    error = signal<number | null>(null);
 
     // changePlace(result: SearchResult) {
     //     this.coordinates.set(result.coordinates);
@@ -49,7 +43,7 @@ export class EventFormComponent implements CanComponentDeactivate {
         date: ['', [Validators.required, minDateValidator(this.today)]],
         description: ['', [Validators.required]],
         price: [0, [Validators.required, Validators.min(0.1)]],
-        image: ['', [this.imageRequiredValidatior()]],
+        // image: ['', [this.imageRequiredValidatior()]],
     });
 
     constructor() {
@@ -72,9 +66,9 @@ export class EventFormComponent implements CanComponentDeactivate {
      * 
      * @returns A validation error object with `imageRequiredError` set to true if the base64 image string is not empty, otherwise null.
      */
-    imageRequiredValidatior(): ValidatorFn {
-        return () => this.base64image ? null : { imageRequiredError: true };
-    }
+    // imageRequiredValidatior(): ValidatorFn {
+    //     return () => this.base64image ? null : { imageRequiredError: true };
+    // }
 
     /**
      * Handles adding a new event by interacting with the EventsService.
@@ -95,28 +89,12 @@ export class EventFormComponent implements CanComponentDeactivate {
             .subscribe({
                 next: () => {
                     this.saved = true;
-                    this.router.navigate(['/events']);
+                    this.nav.navigateRoot(['/events']);
                 },
                 error: (error) => {
-                    this.error.set(error.status);
+                    this.addEventErrorCode.set(error.status);
                 }
             });
-    }
-
-    /**
-     * Determines whether the user can navigate away from the current page.
-     * If there are unsaved changes, the user is prompted with a confirmation dialog.
-     * 
-     * @returns "True" if the changes were saved, form values were not changed or the user confirms the dialog, otherwise "False".
-     */
-    canDeactivate() {
-        if (this.saved || this.eventForm.pristine) return true;
-        return confirm();
-
-        // const modalRef = this.modalService.open(ConfirmModalComponent);
-        // modalRef.componentInstance.title = 'Changes will not be saved';
-        // modalRef.componentInstance.body = 'Do you want to leave the page?. Changes will be lost...';
-        // return modalRef.result.catch(() => false);
     }
 
     /**
@@ -139,5 +117,46 @@ export class EventFormComponent implements CanComponentDeactivate {
     handleEncodedImage(base64: string) {
         this.base64image = base64;
         this.eventForm.get('image')?.updateValueAndValidity();
+    }
+
+    /**
+     * Picks an image from the device.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the photo is picked and processed.
+     */
+    async pickFromGallery() {
+        const photo = await Camera.getPhoto({
+            source: CameraSource.Photos,
+            height: 200,
+            width: 200,
+            allowEditing: true,
+            resultType: CameraResultType.DataUrl // Base64 (url encoded)
+        });
+
+        this.base64image = photo.dataUrl as string;
+        this.changeDetector.markForCheck();
+    }
+
+    /**
+     * Determines whether the user can navigate away from the current page.
+     * If there are unsaved changes, the user is prompted with a confirmation dialog.
+     * 
+     * @returns "True" if the changes were saved, form values were not changed or the user confirms the dialog, otherwise "False".
+     */
+    async canDeactivate() {
+        const isImageUnchanged = this.base64image === "" || (this.event() && this.base64image === this.event()?.image);
+        if (this.saved || (this.eventForm.pristine && isImageUnchanged)) return true;
+
+        const toast = await this.toastCtrl.create({
+            message: 'Changes will not be saved. Do you want to leave the page?',
+            position: 'bottom',
+            buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                { text: 'Leave', role: 'leave' }
+            ]
+        });
+
+        await toast.present();
+        return (await toast.onDidDismiss()).role === 'leave';
     }
 }
