@@ -4,7 +4,7 @@ import { Component, DestroyRef, effect, inject, input, signal, viewChild } from 
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent, IonLoading, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
+import { IonMenuButton, IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent, IonLoading, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
 import { ProfileService } from 'src/app/profile/services/profile.service';
 import { MyEvent } from 'src/app/shared/interfaces/my-event';
 import { EventsResponse } from 'src/app/shared/interfaces/responses';
@@ -17,7 +17,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     templateUrl: './events-page.page.html',
     styleUrls: ['./events-page.page.scss'],
     standalone: true,
-    imports: [IonCol, IonRow, IonGrid, IonSearchbar, IonInfiniteScrollContent, IonInfiniteScroll, RouterLink, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonIcon, IonFabButton, IonFab, IonRefresherContent, IonRefresher, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, EventCardPage],
+    imports: [IonMenuButton, IonCol, IonRow, IonGrid, IonSearchbar, IonInfiniteScrollContent, IonInfiniteScroll, RouterLink, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonIcon, IonFabButton, IonFab, IonRefresherContent, IonRefresher, IonButton, IonButtons, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, ReactiveFormsModule, EventCardPage],
 })
 export class EventsPagePage {
     private eventsService = inject(EventsService);
