@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { IonApp, IonAvatar, IonContent, IonIcon, IonImg, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonRouterLink, IonRouterOutlet, IonSplitPane, NavController, Platform } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { logOutSharp, addSharp, homeSharp, archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, camera, createSharp, eyeSharp, heartOutline, heartSharp, images, logIn, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, peopleSharp, personAddOutline, thumbsDownSharp, thumbsUpSharp, trashBinSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { closeSharp, addSharp, archiveOutline, archiveSharp, arrowUndoCircleSharp, bookmarkOutline, bookmarkSharp, camera, createSharp, eyeSharp, heartOutline, heartSharp, homeSharp, images, logIn, logOutSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, peopleSharp, personAddOutline, thumbsDownSharp, thumbsUpSharp, trashBinSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
 import { AuthService } from './auth/services/auth.service';
 import { ProfileService } from './profile/services/profile.service';
 import { User } from './shared/interfaces/user';
@@ -28,7 +28,7 @@ export class AppComponent {
     ];
     public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
     constructor() {
-        addIcons({ logOutSharp, addSharp, homeSharp, trashBinSharp, createSharp, eyeSharp, thumbsUpSharp, thumbsDownSharp, peopleSharp, images, camera, logIn, personAddOutline, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
+        addIcons({ closeSharp, createSharp, eyeSharp, arrowUndoCircleSharp ,logOutSharp, addSharp, homeSharp, trashBinSharp, thumbsUpSharp, thumbsDownSharp, peopleSharp, images, camera, logIn, personAddOutline, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
 
         effect(() => {
             if (this.authService.logged()) {

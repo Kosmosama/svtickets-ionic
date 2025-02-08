@@ -1,11 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { IonTextarea, IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonRow, IonText, IonTitle, IonToolbar, NavController, ToastController } from '@ionic/angular/standalone';
+import { IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonRow, IonText, IonTextarea, IonTitle, IonToolbar, NavController, ToastController } from '@ionic/angular/standalone';
+import { SearchResult } from 'src/app/ol-maps/search-result';
 import { minDateValidator } from 'src/app/shared/directives/min-date.directive';
 import { MyEvent, MyEventInsert } from 'src/app/shared/interfaces/my-event';
+import { GaAutocompleteDirective } from "../../ol-maps/ga-autocomplete.directive";
+import { OlMapDirective } from "../../ol-maps/ol-map.directive";
+import { OlMarkerDirective } from "../../ol-maps/ol-marker.directive";
 import { EventsService } from '../services/events.service';
 
 @Component({
@@ -13,7 +18,7 @@ import { EventsService } from '../services/events.service';
     templateUrl: './event-form.page.html',
     styleUrls: ['./event-form.page.scss'],
     standalone: true,
-    imports: [IonTextarea, IonGrid, IonRow, IonCol, IonText, IonInput, IonLabel, IonItem, IonList, IonAlert, IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, ReactiveFormsModule, DatePipe]
+    imports: [RouterLink, IonImg, IonTextarea, IonGrid, IonRow, IonCol, IonText, IonInput, IonLabel, IonItem, IonList, IonAlert, IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, ReactiveFormsModule, DatePipe, OlMapDirective, OlMarkerDirective, GaAutocompleteDirective]
 })
 export class EventFormPage {
     private eventsService = inject(EventsService);
@@ -32,10 +37,10 @@ export class EventFormPage {
     base64image = "";
     address = "";
 
-    // changePlace(result: SearchResult) {
-    //     this.coordinates.set(result.coordinates);
-    //     this.address = result.address;
-    // }
+    changePlace(result: SearchResult) {
+        this.coordinates.set(result.coordinates);
+        this.address = result.address;
+    }
 
     private fb = inject(NonNullableFormBuilder);
     eventForm = this.fb.group({
@@ -60,15 +65,6 @@ export class EventFormPage {
             }
         });
     }
-
-    /**
-     * Validator function to check if the base64 image string is empty.
-     * 
-     * @returns A validation error object with `imageRequiredError` set to true if the base64 image string is not empty, otherwise null.
-     */
-    // imageRequiredValidatior(): ValidatorFn {
-    //     return () => this.base64image ? null : { imageRequiredError: true };
-    // }
 
     /**
      * Handles adding a new event by interacting with the EventsService.
@@ -98,28 +94,6 @@ export class EventFormPage {
     }
 
     /**
-     * Checks whether the image input change actually placed a valid image, if the image was invalid,
-     * sets image preview to hidden once again.
-     * 
-     * @param fileInputElement Input element that contains the files.
-     */
-    checkImage(fileInputElement: HTMLInputElement) {
-        if (!fileInputElement.files || fileInputElement.files.length === 0) this.base64image = '';
-        this.eventForm.get('image')?.updateValueAndValidity();
-    }
-
-    /**
-     * Handles the encoded image by setting the base64 string to the `base64image` property
-     * and updating the validity of the 'image' form control in the event form.
-     *
-     * @param base64 - The base64 encoded string of the image.
-     */
-    handleEncodedImage(base64: string) {
-        this.base64image = base64;
-        this.eventForm.get('image')?.updateValueAndValidity();
-    }
-
-    /**
      * Picks an image from the device.
      * 
      * @returns {Promise<void>} A promise that resolves when the photo is picked and processed.
@@ -127,8 +101,8 @@ export class EventFormPage {
     async pickFromGallery() {
         const photo = await Camera.getPhoto({
             source: CameraSource.Photos,
-            height: 200,
-            width: 200,
+            height: 768,
+            width: 1024,
             allowEditing: true,
             resultType: CameraResultType.DataUrl // Base64 (url encoded)
         });

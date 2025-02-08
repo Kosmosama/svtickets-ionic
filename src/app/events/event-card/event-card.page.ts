@@ -42,16 +42,17 @@ export class EventCardPage {
                 },
                 {
                     text: 'Edit',
-                    icon: 'trash',
+                    icon: 'create-sharp',
                     handler: () => this.nav.navigateRoot(['/events', 'edit', this.event().id]),
                 },
                 {
                     text: 'View',
-                    icon: 'trash',
+                    icon: 'eye-sharp',
                     handler: () => this.nav.navigateRoot(['/events', this.event().id]),
                 },
                 {
                     text: 'Cancel',
+                    icon: 'close-sharp',
                     role: 'cancel',
                     data: {
                         action: 'cancel',

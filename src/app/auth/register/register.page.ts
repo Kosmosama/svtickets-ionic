@@ -2,7 +2,7 @@ import { afterNextRender, ChangeDetectorRef, Component, DestroyRef, inject, sign
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { NavController, IonRouterLink, ToastController, IonAlert, IonContent, IonHeader, IonInput, IonLabel, IonList, IonText, IonTitle, IonToolbar, IonItem, IonButton, IonIcon, IonGrid, IonRow, IonCol } from "@ionic/angular/standalone";
+import { NavController, IonRouterLink, ToastController, IonAlert, IonContent, IonHeader, IonInput, IonLabel, IonList, IonText, IonTitle, IonToolbar, IonItem, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonImg } from "@ionic/angular/standalone";
 import { User } from '../../shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
 import { GeolocationService } from '../services/geolocation.service';
@@ -13,7 +13,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
     templateUrl: './register.page.html',
     styleUrls: ['./register.page.scss'],
     standalone: true,
-    imports: [IonCol, IonRow, IonGrid, IonIcon, IonButton, IonItem, RouterLink, IonInput, IonAlert, IonText, IonLabel, IonList, IonContent, IonHeader, IonToolbar, IonTitle, ReactiveFormsModule], // IonRouterLink, 
+    imports: [IonImg, IonCol, IonRow, IonGrid, IonIcon, IonButton, IonItem, RouterLink, IonInput, IonAlert, IonText, IonLabel, IonList, IonContent, IonHeader, IonToolbar, IonTitle, ReactiveFormsModule], // IonRouterLink, 
 })
 export class RegisterPage {
     private authService = inject(AuthService);

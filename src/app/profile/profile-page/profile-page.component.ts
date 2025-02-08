@@ -8,11 +8,12 @@ import { ValidationClassesDirective } from '../../shared/directives/valdation-cl
 import { ProfileService } from '../services/profile.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EncodeBase64Directive } from '../../shared/directives/encode-base64.directive';
+import { IonImg } from "@ionic/angular/standalone";
 
 @Component({
     selector: 'profile-page',
     standalone: true,
-    imports: [RouterLink, ReactiveFormsModule, ValidationClassesDirective, EncodeBase64Directive], // OlMapDirective, OlMarkerDirective, 
+    imports: [IonImg, RouterLink, ReactiveFormsModule, ValidationClassesDirective, EncodeBase64Directive], // OlMapDirective, OlMarkerDirective, 
     templateUrl: './profile-page.component.html',
     styleUrl: './profile-page.component.css'
 })

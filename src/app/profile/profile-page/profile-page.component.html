@@ -1,7 +1,7 @@
 <div class="row mt-4" id="profile">
     <div class="col-3">
         <div>
-            <img class="w-100" id="avatar" [src]="user().avatar" [alt]="user().name" />
+            <ion-img class="w-100" id="avatar" [src]="user().avatar" [alt]="user().name"></ion-img>
             @if (user().me) {
                 <label class="btn btn-sm btn-danger">
                     <i class="bi bi-image"></i>

@@ -93,18 +93,24 @@
         </ion-list>
 
         @if (base64image) {
-        <img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3">
+        <ion-img [src]="base64image" alt="" id="imgPreview" class="img-thumbnail mb-3"></ion-img>
         }
 
-        <!-- <div class="map-container">
+        <div class="map-container">
             <ol-map [coordinates]="coordinates()">
                 <ga-autocomplete (locationChange)="changePlace($event)"></ga-autocomplete>
                 <ol-marker [coordinates]="coordinates()"></ol-marker>
             </ol-map>
-        </div> -->
+        </div>
 
         <ion-grid>
             <ion-row>
+                <ion-col>
+                    <ion-button fill="outline" [routerLink]="['/events']">
+                        <ion-icon name="arrow-undo-circle-sharp" slot="start"></ion-icon>
+                        Cancel
+                    </ion-button>
+                  </ion-col>
                 <ion-col>
                     <ion-button type="submit" color="primary" [disabled]="eventForm.invalid || !base64image">
                         <ion-icon name="add-sharp" slot="start"></ion-icon>
