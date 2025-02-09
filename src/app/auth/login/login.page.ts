@@ -31,7 +31,10 @@ export class LoginPage {
 
     /**
      * Logs in a user with geolocation data appended.
+     * [Was separated into being a function so that it could be used with google login]
+     * 
      * @param {UserLogin | ThirdPartyLogin} user - The user details for login, either form-based or third-party.
+     * 
      * @returns {Observable<void>} An Observable that completes upon successful login or emits an error.
      */
     private login(user: UserLogin | ThirdPartyLogin): Observable<void> {
@@ -60,24 +63,6 @@ export class LoginPage {
                 });
         });
     }
-
-    /**
-     * Handles Google login, including geolocation and navigation.
-     * @param {google.accounts.id.CredentialResponse} resp - The credential response from Google login.
-     */
-    // loginWithGoogle(resp: google.accounts.id.CredentialResponse) {
-    //     const thirdPartyUser: ThirdPartyLogin = {
-    //         token: resp.credential,
-    //         lat: 0,
-    //         lng: 0,
-    //     };
-
-    //     this.login(thirdPartyUser)
-    //         .pipe(takeUntilDestroyed(this.destroyRef))
-    //         .subscribe(() => {
-    //             this.router.navigate(['/events']);
-    //         });
-    // }
 
     /**
      * Handles form-based login, including geolocation and navigation.

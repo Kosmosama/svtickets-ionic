@@ -1,19 +1,19 @@
-import { RouterLink } from '@angular/router';
-import { ChangeDetectorRef, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonList, IonItem, IonAvatar, IonLabel, IonFab, IonIcon, IonFabButton } from '@ionic/angular/standalone';
-import { EventDetailPage } from '../event-detail.page';
+import { RouterLink } from '@angular/router';
+import { IonAvatar, IonCard, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonToolbar } from '@ionic/angular/standalone';
 import { User } from 'src/app/shared/interfaces/user';
 import { EventsService } from '../../services/events.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EventDetailPage } from '../event-detail.page';
 
 @Component({
     selector: 'app-event-attend',
     templateUrl: './event-attend.page.html',
     styleUrls: ['./event-attend.page.scss'],
     standalone: true,
-    imports: [RouterLink, IonFabButton, IonIcon, IonFab, IonLabel, IonAvatar, IonItem, IonList, IonCardHeader, IonCard, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule]
+    imports: [IonCardTitle, RouterLink, IonFabButton, IonIcon, IonFab, IonLabel, IonAvatar, IonItem, IonList, IonCardHeader, IonCard, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule]
 })
 export class EventAttendPage {
     private eventService = inject(EventsService);
@@ -30,6 +30,7 @@ export class EventAttendPage {
 
     /**
      * Fetches and sets the attendees for the given event ID.
+     * 
      * @param id - The ID of the event.
      */
     showAttendees(id: number) {

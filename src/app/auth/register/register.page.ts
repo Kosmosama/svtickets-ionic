@@ -1,13 +1,13 @@
 import { afterNextRender, ChangeDetectorRef, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterLink } from '@angular/router';
 import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { NavController, IonRouterLink, ToastController, IonAlert, IonContent, IonHeader, IonInput, IonLabel, IonList, IonText, IonTitle, IonToolbar, IonItem, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonImg } from "@ionic/angular/standalone";
+import { RouterLink } from '@angular/router';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Geolocation } from '@capacitor/geolocation';
+import { IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonList, IonRow, IonText, IonTitle, IonToolbar, NavController, ToastController } from "@ionic/angular/standalone";
 import { User } from '../../shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
-import { Geolocation } from '@capacitor/geolocation';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-// #TODO Use capacitor geolocation
+
 @Component({
     selector: 'app-register',
     templateUrl: './register.page.html',
@@ -48,7 +48,6 @@ export class RegisterPage {
         password: ['', [Validators.required, Validators.minLength(4)]],
         lat: [0],
         lng: [0],
-        // avatar: ['', Validators.required],
     });
 
     /**
@@ -88,7 +87,6 @@ export class RegisterPage {
                     this.nav.navigateRoot(['/auth/login']);
                 },
                 error: (error) => {
-                    // this.registerForm.get('email')?.setErrors({ serverError: true});
                     this.registerErrorCode.set(error.status);
                     this.registerForm.get('email')?.setValue('');
                     this.registerForm.get('repeatEmail')?.setValue('');

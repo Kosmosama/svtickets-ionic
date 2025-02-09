@@ -5,29 +5,40 @@
 
 <ion-content [fullscreen]="true">
     <ion-card class="mt-4 mb-4">
-        <ion-card-header color="secondary" class="text-white" id="address">
-            Attendees to the event ({{ event().numAttend }})
-        </ion-card-header>
-        <ion-list id="userList">
-            @for (attendee of attendees(); track attendee.id) {
-            <ion-item>
-                <ion-avatar slot="start">
-                    <a [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
-                        <img [src]="attendee.avatar" [alt]="attendee.name" />
-                    </a>
-                </ion-avatar>
-                <ion-label>
-                    <h2>
-                        <a class="text-decoration-none name"
-                            [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
-                            {{ attendee.name }}
-                        </a>
-                    </h2>
-                    <p class="email">{{ attendee.email }}</p>
-                </ion-label>
-            </ion-item>
-            }
-        </ion-list>
+        @if (event().numAttend > 0) {
+            <ion-card-header color="secondary" class="text-white" id="address">
+                Attendees to the event ({{ event().numAttend }})
+            </ion-card-header>
+            <ion-list id="userList">
+                @for (attendee of attendees(); track attendee.id) {
+                    <ion-item>
+                        <ion-avatar slot="start">
+                            <a [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
+                                <img [src]="attendee.avatar" [alt]="attendee.name" />
+                            </a>
+                        </ion-avatar>
+                        <ion-label>
+                            <h2>
+                                <a class="text-decoration-none name"
+                                [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
+                                {{ attendee.name }}
+                            </a>
+                        </h2>
+                        <p class="email">{{ attendee.email }}</p>
+                        </ion-label>
+                    </ion-item>
+                }
+            </ion-list>
+        }
+        @else {
+            <div class="col">
+                <ion-card color="danger">
+                    <ion-card-header>
+                        <ion-card-title>No attendees for this event</ion-card-title>
+                    </ion-card-header>
+                </ion-card>
+            </div>
+        }
     </ion-card>
 
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">

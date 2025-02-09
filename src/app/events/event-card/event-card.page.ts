@@ -30,6 +30,11 @@ export class EventCardPage {
 
     error = signal<boolean>(false);
 
+    /**
+     * Presents an action sheet with options to delete, edit, view, or cancel.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the action sheet is presented.
+     */
     async presentActionSheet() {
         const actionSheet = await this.actionSheetCtrl.create({
             header: 'Actions',
@@ -63,7 +68,6 @@ export class EventCardPage {
 
         await actionSheet.present();
     }
-
 
     /**
      * Presents a confirmation alert to the user before deleting an event.

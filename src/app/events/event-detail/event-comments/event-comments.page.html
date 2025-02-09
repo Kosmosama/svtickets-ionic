@@ -15,35 +15,46 @@
         </ion-fab-button>
     </ion-fab>
 
-    <ion-list style="padding-bottom: 50px">
-        @for (comment of comments(); track comment.id) {
-        <ion-item class="list-group-item">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="auto" class="text-center user-info">
-                        <a class="avatar"
-                            [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">
-                            <ion-avatar>
-                                <img class="rounded-circle" [src]="comment.user?.avatar" [alt]="comment.user?.name" />
-                            </ion-avatar>
-                        </a>
-                        <div>
-                            <small>
-                                <a class="text-decoration-none name"
-                                    [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">{{
-                                    comment.user!.name }}</a>
-                            </small>
-                        </div>
-                        <div>
-                            <small class="date">{{ comment.date | date : "dd/MM/yyyy" }}</small>
-                        </div>
-                    </ion-col>
-                    <ion-col class="comment">
-                        {{ comment.comment }}
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-item>
+    <ion-list>
+        @if (comments().length > 0) {
+            @for (comment of comments(); track comment.id) {
+            <ion-item class="list-group-item">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size="auto" class="text-center user-info">
+                            <a class="avatar"
+                                [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">
+                                <ion-avatar>
+                                    <img class="rounded-circle" [src]="comment.user?.avatar" [alt]="comment.user?.name" />
+                                </ion-avatar>
+                            </a>
+                            <div>
+                                <small>
+                                    <a class="text-decoration-none name"
+                                        [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">{{
+                                        comment.user!.name }}</a>
+                                </small>
+                            </div>
+                            <div>
+                                <small class="date">{{ comment.date | date : "dd/MM/yyyy" }}</small>
+                            </div>
+                        </ion-col>
+                        <ion-col class="comment">
+                            {{ comment.comment }}
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+            }         
+        }
+        @else {
+            <div class="col">
+                <ion-card color="danger">
+                    <ion-card-header>
+                        <ion-card-title>No comments for this event</ion-card-title>
+                    </ion-card-header>
+                </ion-card>
+            </div>
         }
     </ion-list>
 </ion-content>

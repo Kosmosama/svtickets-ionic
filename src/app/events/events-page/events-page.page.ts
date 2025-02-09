@@ -4,7 +4,7 @@ import { Component, DestroyRef, effect, inject, input, signal, viewChild } from 
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonMenuButton, IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent, IonLoading, IonGrid, IonRow, IonCol, IonAlert } from '@ionic/angular/standalone';
+import { IonMenuButton, IonButton, IonSearchbar, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonList, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, IonInfiniteScroll, IonInfiniteScrollContent, IonLoading, IonGrid, IonRow, IonCol, IonAlert, AlertController } from '@ionic/angular/standalone';
 import { ProfileService } from 'src/app/profile/services/profile.service';
 import { MyEvent } from 'src/app/shared/interfaces/my-event';
 import { EventsResponse } from 'src/app/shared/interfaces/responses';
@@ -23,6 +23,7 @@ export class EventsPagePage {
     private eventsService = inject(EventsService);
     private profileService = inject(ProfileService);
     private destroyRef = inject(DestroyRef);
+    private alertCtrl = inject(AlertController);
     
     private refresher = viewChild(IonRefresher);
     private infinite = viewChild(IonInfiniteScroll);
@@ -102,10 +103,10 @@ export class EventsPagePage {
     /**
      * Updates orderCriteria criteria signal.
      */
-    orderBy(method: "distance" | "date" | "price"): void {
-        this.refresh();
-        this.orderCriteria.set(method);
-    }
+    // orderBy(method: "distance" | "date" | "price"): void {
+    //     this.refresh();
+    //     this.orderCriteria.set(method);
+    // }
 
     /**
      * Refreshes the current page.
@@ -119,5 +120,31 @@ export class EventsPagePage {
      */
     loadMoreEvents() {
         this.pageToLoad.update((page) => page + 1);
+    }
+
+    /**
+     * Presents an alert to the user for sorting events by different criteria.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the alert is presented.
+     */
+    async presentSortAlert() {
+        const alert = await this.alertCtrl.create({
+            header: 'Sort Events',
+            inputs: [
+                { type: 'radio', label: 'Distance', value: 'distance', checked: this.orderCriteria() === 'distance' },
+                { type: 'radio', label: 'Date', value: 'date', checked: this.orderCriteria() === 'date' },
+                { type: 'radio', label: 'Price', value: 'price', checked: this.orderCriteria() === 'price' }
+            ],
+            buttons: [
+                { text: 'Cancel', role: 'cancel' },
+                { 
+                    text: 'OK', handler: (value) => {
+                        this.refresh();
+                        this.orderCriteria.set(value);
+                    } 
+                }
+            ]
+        });
+        await alert.present();
     }
 }

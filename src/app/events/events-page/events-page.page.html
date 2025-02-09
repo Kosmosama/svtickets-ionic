@@ -4,16 +4,18 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
         <ion-title>Events</ion-title>
-        <ion-searchbar type="text" name="search" id="search" placeholder="Search" aria-label="Search"
-            [formControl]="searchControl" debounce="600"></ion-searchbar>
+        <ion-searchbar type="text" name="search" id="search" placeholder="Search" aria-label="Search" [formControl]="searchControl" debounce="600"></ion-searchbar>
+        <ion-button (click)="presentSortAlert()">
+            <ion-icon name="funnel-sharp"></ion-icon>
+        </ion-button>
     </ion-toolbar>
-    <ion-toolbar>
+    <!-- <ion-toolbar>
         <ion-buttons slot="start">
             <ion-button (click)="orderBy('distance')">Order by Distance</ion-button>
             <ion-button (click)="orderBy('date')">Order by Date</ion-button>
             <ion-button (click)="orderBy('price')">Order by Price</ion-button>
         </ion-buttons>
-    </ion-toolbar>
+    </ion-toolbar> -->
 </ion-header>
 
 <ion-content [fullscreen]="true">

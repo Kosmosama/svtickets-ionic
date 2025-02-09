@@ -94,6 +94,7 @@ export class EventsService {
      * Retrieves the comments for a specific event.
      *
      * @param eventId - The ID of the event for which to retrieve comments.
+     * 
      * @returns An Observable that emits an array of Comment objects.
      */
     getComments(eventId: number): Observable<Comment[]> {
@@ -107,6 +108,7 @@ export class EventsService {
      *
      * @param eventId - The ID of the event to comment on.
      * @param comment - The comment text to post.
+     * 
      * @returns An Observable that emits the posted Comment object.
      */
     postComment(eventId: number, comment: string): Observable<Comment> {

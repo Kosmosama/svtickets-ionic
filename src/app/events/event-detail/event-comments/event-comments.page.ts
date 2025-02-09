@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, viewChild } from '@angular/core';
 import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonAvatar, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, IonToolbar, Platform, IonGrid, IonRow, IonCol, ToastController } from '@ionic/angular/standalone';
+import { AlertController, IonAvatar, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonRefresher, IonRefresherContent, IonToolbar, Platform, IonGrid, IonRow, IonCol, ToastController, IonCardTitle, IonCardHeader, IonCard } from '@ionic/angular/standalone';
 import { EventsService } from '../../services/events.service';
 import { EventDetailPage } from '../event-detail.page';
 import { RouterLink } from '@angular/router';
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './event-comments.page.html',
     styleUrls: ['./event-comments.page.scss'],
     standalone: true,
-    imports: [IonCol, IonRow, IonGrid, IonAvatar, IonIcon, RouterLink, IonFabButton, IonFab, IonRefresher, IonRefresherContent, IonItem, IonList, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule]
+    imports: [IonCard, IonCardHeader, IonCardTitle, IonCol, IonRow, IonGrid, IonAvatar, IonIcon, RouterLink, IonFabButton, IonFab, IonRefresher, IonRefresherContent, IonItem, IonList, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule]
 })
 export class EventCommentsPage {
     private alertCtrl = inject(AlertController);
@@ -42,10 +42,23 @@ export class EventCommentsPage {
         });
     }
 
+    /**
+     * Loads the comments for the event by refreshing the comments resource.
+     *
+     * @param refresher - Optional IonRefresher instance to trigger a reload.
+     */
     loadComments(refresher?: IonRefresher) {
         this.commentsResource.reload();
     }
 
+    /**
+     * Prompts the user to add a new comment via an alert dialog.
+     * If the comment is valid, it posts the comment to the event service
+     * and updates the comments resource.
+     * Displays a toast message if the comment is empty.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the comment is added or the alert is dismissed.
+     */
     async addComment() {
         const alert = await this.alertCtrl.create({
             header: 'New commment',
