@@ -7,9 +7,8 @@ import { IonAlert, IonButton, IonCol, IonContent, IonGrid, IonHeader, IonIcon, I
 import { Observable } from 'rxjs';
 import { ThirdPartyLogin, UserLogin } from 'src/app/shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
-import { GeolocationService } from '../services/geolocation.service';
-// #TODO Use capacitor geolocation
-// #TODO Check html redirections (from all components)
+import { Geolocation } from '@capacitor/geolocation';
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.page.html',
@@ -37,11 +36,10 @@ export class LoginPage {
      */
     private login(user: UserLogin | ThirdPartyLogin): Observable<void> {
         return new Observable<void>((observer) => {
-            GeolocationService.getLocation()
-                .then((coords) => {
-                    console.log(coords);
-                    user.lat = coords.latitude;
-                    user.lng = coords.longitude;
+            Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+                .then((coordinates) => {
+                    user.lat = coordinates.coords.latitude;
+                    user.lng = coordinates.coords.longitude;
                 })
                 .catch((error) => {
                     console.warn('Could not retrieve location, using default coordinates:', error);

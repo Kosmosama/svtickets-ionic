@@ -5,7 +5,7 @@ import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, Validator
 import { NavController, IonRouterLink, ToastController, IonAlert, IonContent, IonHeader, IonInput, IonLabel, IonList, IonText, IonTitle, IonToolbar, IonItem, IonButton, IonIcon, IonGrid, IonRow, IonCol, IonImg } from "@ionic/angular/standalone";
 import { User } from '../../shared/interfaces/user';
 import { AuthService } from '../services/auth.service';
-import { GeolocationService } from '../services/geolocation.service';
+import { Geolocation } from '@capacitor/geolocation';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 // #TODO Use capacitor geolocation
 @Component({
@@ -30,10 +30,10 @@ export class RegisterPage {
 
     constructor() {
         afterNextRender(() => {
-            GeolocationService.getLocation()
-                .then((coords) => {
-                    this.registerForm.get('lat')?.setValue(coords.latitude);
-                    this.registerForm.get('lng')?.setValue(coords.longitude);
+            Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+                .then((coordinates) => {
+                    this.registerForm.get('lat')?.setValue(coordinates.coords.latitude);
+                    this.registerForm.get('lng')?.setValue(coordinates.coords.longitude);
                 })
                 .catch((error) => {
                     console.warn(error);
