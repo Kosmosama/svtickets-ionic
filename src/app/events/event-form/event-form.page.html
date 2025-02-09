@@ -17,8 +17,7 @@
                 @let titleErrors = titleControl?.errors;
 
                 <ion-label for="title" class="form-label">Title</ion-label>
-                <ion-input type="text" class="form-control" name="title" id="title" placeholder="Enter title"
-                    formControlName="title" />
+                <ion-input type="text" class="form-control" name="title" id="title" placeholder="Enter title" formControlName="title" />
 
                 @if (titleControl?.touched || titleControl?.dirty) {
                     @if(titleErrors?.['required']) {

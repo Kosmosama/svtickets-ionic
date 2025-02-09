@@ -8,8 +8,8 @@ export const routes: Routes = [
         data: { animation: 'myProfile' },
         resolve: { user: profileResolver },
         loadComponent: () =>
-            import('./profile-page/profile-page.component').then(
-                (c) => c.ProfilePageComponent
+            import('./profile-page/profile.page').then(
+                (c) => c.ProfilePage
             ),
         title: 'My Profile | SVtickets',
     },
@@ -19,8 +19,8 @@ export const routes: Routes = [
         resolve: { user: profileResolver },
         canActivate: [numericIdGuard],
         loadComponent: () =>
-            import('./profile-page/profile-page.component').then(
-                (c) => c.ProfilePageComponent
+            import('./profile-page/profile.page').then(
+                (c) => c.ProfilePage
             ),
         title: 'Profile | SVtickets',
     },

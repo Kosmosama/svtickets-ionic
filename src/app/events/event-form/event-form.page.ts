@@ -48,7 +48,6 @@ export class EventFormPage {
         date: ['', [Validators.required, minDateValidator(this.today)]],
         description: ['', [Validators.required]],
         price: [0, [Validators.required, Validators.min(0.1)]],
-        // image: ['', [this.imageRequiredValidatior()]],
     });
 
     constructor() {

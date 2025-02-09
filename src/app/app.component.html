@@ -2,7 +2,7 @@
     <ion-split-pane contentId="main-content" when="lg">
         <ion-menu contentId="main-content" type="overlay" [disabled]="!user()">
             @if (user()) {
-            <ion-item color="tertiary">
+            <ion-item color="tertiary" [routerLink]="['/profile']">
                 <ion-avatar slot="start">
                     <ion-img [src]="user()!.avatar"></ion-img>
                 </ion-avatar>

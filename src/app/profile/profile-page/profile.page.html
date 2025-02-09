@@ -1,0 +1,174 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-title>{{ user().name }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-grid class="mt-4" id="profile">
+        <ion-row>
+            <ion-col size="3">
+                <div>
+                    <ion-img class="w-100" id="avatar" [src]="user().avatar" [alt]="user().name"></ion-img>
+                    @if (user().me) {
+                    <ion-button color="tertiary" (click)="takePhoto()">
+                        <ion-icon name="camera" slot="start"></ion-icon>
+                        Take new photo
+                    </ion-button>
+                    <ion-button color="tertiary" (click)="pickFromGallery()">
+                        <ion-icon name="images" slot="start"></ion-icon>
+                        Select new photo from gallery
+                    </ion-button>
+                    }
+                </div>
+            </ion-col>
+
+            <ion-col size="9" id="profileInfo">
+                <h4 id="name">{{ user().name }}</h4>
+                <h4 id="email">
+                    <small class="text-muted">{{ user().email }}</small>
+                </h4>
+                @if (user().me) {
+                <div>
+                    <ion-button color="primary" id="editProfile" (click)="editProfile()">
+                        <ion-icon name="create-sharp"></ion-icon>
+                        Edit profile
+                    </ion-button>
+                    <ion-button color="success" id="editPassword" (click)="editPassword()">
+                        <ion-icon name="shield-half-sharp"></ion-icon>
+                        Edit password
+                    </ion-button>
+                </div>
+                }
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-button fill="clear" [routerLink]="['/events']" [queryParams]="{ creator: user().id }">
+        Created events
+    </ion-button>
+    <ion-button fill="clear" [routerLink]="['/events']" [queryParams]="{ attending: user().id }">
+        Attended events
+    </ion-button>
+
+    <div class="map-container">
+        <ol-map [coordinates]="[user().lng, user().lat]">
+            <ol-marker [coordinates]="[user().lng, user().lat]"></ol-marker>
+        </ol-map>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <ion-modal [isOpen]="isProfileModalOpen()" (ionModalDidDismiss)="closeModal()">
+        <ng-template>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>Edit Profile</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button (click)="closeModal()">Close</ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+                <form [formGroup]="profileForm" (ngSubmit)="changeProfile()">
+                    <ion-list>
+                        <div class="mb-3">
+                            @let emailControl = profileForm.get('email');
+                            @let emailErrors = emailControl?.errors;
+
+                            <ion-label for="email" class="form-label">Email:</ion-label>
+                            <ion-input type="email" class="form-control" name="email" id="email2" placeholder="Email"
+                                formControlName="email" />
+
+                            @if (emailControl?.touched || emailControl?.dirty) {
+                                @if(emailErrors?.['required']) {
+                                <ion-text color="danger">Email cannot be empty.</ion-text>
+                                }
+
+                                @if(emailErrors?.['email']) {
+                                <ion-text color="danger">Email must be an email.</ion-text>
+                                }
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            @let nameControl = profileForm.get('name');
+                            @let nameErrors = nameControl?.errors;
+
+                            <ion-label for="name" class="form-label">Name:</ion-label>
+                            <ion-input type="text" class="form-control" name="name" id="name2" placeholder="Name"
+                                formControlName="name" />
+
+                            @if (nameControl?.touched || nameControl?.dirty) {
+                                @if(nameErrors?.['required']) {
+                                <ion-text color="danger">Name cannot be empty.</ion-text>
+                                }
+                            }
+                        </div>
+                    </ion-list>
+                    <ion-button expand="full" type="submit">Save Changes</ion-button>
+                </form>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+
+    <!-- Edit Password Modal -->
+    <ion-modal [isOpen]="isPasswordModalOpen()" (ionModalDidDismiss)="closeModal()">
+        <ng-template>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>Change Password</ion-title>
+                    <ion-buttons slot="end">
+                        <ion-button (click)="closeModal()">Close</ion-button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
+                <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+                    <ion-list>
+                        <div class="mb-3">
+                            @let passwordControl = passwordForm.get('password');
+                            @let passwordErrors = passwordControl?.errors;
+
+                            <ion-label for="password" class="form-label">Password:</ion-label>
+                            <ion-input type="password" class="form-control" name="password" id="password"
+                                placeholder="Password" formControlName="password" />
+
+                            @if (passwordControl?.touched || passwordControl?.dirty) {
+                                @if(passwordErrors?.['required']) {
+                                <ion-text color="danger">Password cannot be empty.</ion-text>
+                                }
+
+                                @if(passwordErrors?.['minlength']) {
+                                <ion-text color="danger">Password must be at least 4 characters long.</ion-text>
+                                }
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            @let repeatPasswordControl = passwordForm.get('password2');
+                            @let repeatPasswordErrors = repeatPasswordControl?.errors;
+
+                            <ion-label for="password2" class="form-label">Repeat password:</ion-label>
+                            <ion-input type="password" class="form-control" name="password2" id="password2"
+                                placeholder="Repeat password" formControlName="password2" />
+
+                            @if (passwordControl?.touched || passwordControl?.dirty) {
+                                @if(repeatPasswordErrors?.['required']) {
+                                <ion-text color="danger">Password cannot be empty.</ion-text>
+                                }
+
+                                @if(repeatPasswordErrors?.['minlength']) {
+                                <ion-text color="danger">Password must be at least 4 characters long.</ion-text>
+                                }
+                                @else if (repeatPasswordErrors?.['passwordMismatch']) {
+                                <ion-text color="danger">Passwords do not match.</ion-text>
+                                }
+                            }
+                        </div>
+                    </ion-list>
+                    <ion-button expand="full" type="submit">Save Changes</ion-button>
+                </form>
+            </ion-content>
+        </ng-template>
+    </ion-modal>
+</ion-content>
