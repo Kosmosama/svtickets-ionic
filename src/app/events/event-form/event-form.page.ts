@@ -32,7 +32,7 @@ export class EventFormPage {
     today: string = new Date().toISOString().split('T')[0];
     coordinates = signal<[number, number]>([-0.5, 38.5]);
     addEventErrorCode = signal<number | null>(null);
-    
+
     saved = false;
     base64image = "";
     address = "";

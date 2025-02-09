@@ -34,7 +34,7 @@
 
 /* @use "@ionic/angular/css/palettes/dark.always.css"; */
 /* @use "@ionic/angular/css/palettes/dark.class.css"; */
-@use '@ionic/angular/css/palettes/dark.system.css';
+@use "@ionic/angular/css/palettes/dark.system.css";
 
 .ion-color-github {
     --ion-color-base: var(--ion-color-github);
@@ -43,4 +43,11 @@
     --ion-color-contrast-rgb: var(--ion-color-github-contrast-rgb);
     --ion-color-shade: var(--ion-color-github-shade);
     --ion-color-tint: var(--ion-color-github-tint);
+}
+
+@import "ol/ol.css";
+@import "@geoapify/geocoder-autocomplete/styles/minimal.css";
+
+.autocomplete-container {
+    position: relative;
 }

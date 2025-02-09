@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-refresher #refresher slot="fixed" (ionRefresh)="loadComments(refresher)">
+        <ion-refresher-content>
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="secondary" (click)="addComment()">
+            <ion-icon name="add-sharp"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+    <ion-list style="padding-bottom: 50px">
+        @for (comment of comments(); track comment.id) {
+        <ion-item class="list-group-item">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="auto" class="text-center user-info">
+                        <a class="avatar"
+                            [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">
+                            <ion-avatar>
+                                <img class="rounded-circle" [src]="comment.user?.avatar" [alt]="comment.user?.name" />
+                            </ion-avatar>
+                        </a>
+                        <div>
+                            <small>
+                                <a class="text-decoration-none name"
+                                    [routerLink]="comment.user?.me !== null ? ['/profile'] : ['/profile', comment.user?.id]">{{
+                                    comment.user!.name }}</a>
+                            </small>
+                        </div>
+                        <div>
+                            <small class="date">{{ comment.date | date : "dd/MM/yyyy" }}</small>
+                        </div>
+                    </ion-col>
+                    <ion-col class="comment">
+                        {{ comment.comment }}
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+        }
+    </ion-list>
+</ion-content>

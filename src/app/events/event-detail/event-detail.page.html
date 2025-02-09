@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="events"></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ event()!.title }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-tabs>
+    <ion-tab-bar slot="bottom">
+        <ion-tab-button tab="info">
+            <ion-icon name="information-sharp"></ion-icon>
+            <ion-label>Info</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="location">
+            <ion-icon name="location-sharp"></ion-icon>
+            <ion-label>Location</ion-label>
+        </ion-tab-button>
+        <ion-tab-button tab="attend">
+            <ion-icon name="people-sharp"></ion-icon>
+            <ion-label>Attend</ion-label>
+        </ion-tab-button>
+        @if (event().attend) {
+            <ion-tab-button tab="comments">
+                <ion-icon name="chatbubbles-sharp"></ion-icon>
+                <ion-label>Comments</ion-label>
+            </ion-tab-button>
+        }
+    </ion-tab-bar>
+</ion-tabs>

@@ -16,7 +16,7 @@ dependencies {
     implementation project(':capacitor-preferences')
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
-
+    implementation "com.squareup.okhttp3:okhttp:3.12.0"
 }
 
 

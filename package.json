@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@awesome-cordova-plugins/launch-navigator": "^6.14.0",
     "@capacitor/android": "^7.0.1",
     "@capacitor/app": "7.0.0",
     "@capacitor/camera": "^7.0.0",
@@ -37,7 +38,7 @@
     "ol": "^10.4.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "uk.co.workingedge.phonegap.plugin.launchnavigator": "^5.0.7"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.0.0",

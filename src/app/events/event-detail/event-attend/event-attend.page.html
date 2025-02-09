@@ -1,0 +1,38 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <ion-card class="mt-4 mb-4">
+        <ion-card-header color="secondary" class="text-white" id="address">
+            Attendees to the event ({{ event().numAttend }})
+        </ion-card-header>
+        <ion-list id="userList">
+            @for (attendee of attendees(); track attendee.id) {
+            <ion-item>
+                <ion-avatar slot="start">
+                    <a [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
+                        <img [src]="attendee.avatar" [alt]="attendee.name" />
+                    </a>
+                </ion-avatar>
+                <ion-label>
+                    <h2>
+                        <a class="text-decoration-none name"
+                            [routerLink]="attendee.me ? ['/profile'] : ['/profile', attendee.id]">
+                            {{ attendee.name }}
+                        </a>
+                    </h2>
+                    <p class="email">{{ attendee.email }}</p>
+                </ion-label>
+            </ion-item>
+            }
+        </ion-list>
+    </ion-card>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="toggleAttend()">
+            <ion-icon [name]="event().attend ? 'person-remove-sharp' : 'person-add-sharp'"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

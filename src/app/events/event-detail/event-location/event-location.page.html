@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar></ion-toolbar>
+    <ion-toolbar>
+        <ion-label>
+            {{ event().address }}
+        </ion-label>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <div class="map-container">
+        <ol-map [coordinates]="coordinates()">
+            <ol-marker [coordinates]="coordinates()"></ol-marker>
+        </ol-map>
+    </div>
+
+    @if (isPlatformCapacitor()) {
+        <ion-label>This is a phone</ion-label>
+    }
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="navigate()">
+            <ion-icon name="navigate-sharp"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

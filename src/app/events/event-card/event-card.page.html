@@ -63,7 +63,7 @@
                                 </a>
                             </ion-row>
                             <ion-row class="date small text-muted">
-                                {{ event().date | date : "dd/MM/yyyy" }}
+                                {{ isValidDate(event().date) ? (event().date | date : "dd/MM/yyyy") : 'Date error' }}
                             </ion-row>
                         </div>
                     </ion-col>
